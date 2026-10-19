@@ -13,7 +13,7 @@ export const meta: Route.MetaFunction = () =>
   pageMeta({
     title: "Our Telemetry Tech",
     description:
-      "Low-cost, offline-first substrate temperature probes that send SMS alerts over 2G networks so operators can act on heat build-up. Pilot in preparation.",
+      "Ruggedised, offline-first substrate probes in development, designed to send SMS alerts over 2G networks so operators can adjust aeration and ventilation. Pilot in preparation.",
   });
 
 const icons: Record<(typeof pipeline)[number]["id"], LucideIcon> = {
@@ -55,7 +55,7 @@ function BlockDiagram() {
       </ol>
       <figcaption id="diagram-caption" className="mt-5 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <span className="text-[0.875rem] text-ink-70">
-          System overview: probe in substrate, 2G SMS gateway, operator phone, action.
+          Planned system: probe in substrate, 2G SMS gateway, operator phone, action.
         </span>
         <Caption>{ILLUSTRATIVE_CAPTION}</Caption>
       </figcaption>
@@ -70,7 +70,7 @@ export default function Telemetry() {
     <>
       <PageHeader
         eyebrow="Our Telemetry Tech"
-        title="Substrate monitoring that works offline"
+        title="Substrate telemetry for tropical farms"
         intro={
           <p>
             Intensive larval rearing generates concentrated metabolic heat. When dense substrate beds exceed critical
@@ -87,12 +87,12 @@ export default function Telemetry() {
       <section aria-labelledby="how-heading" className="section">
         <div className="container-research">
           <SectionHeader
-            eyebrow="How it works"
+            eyebrow="How it is designed to work"
             title="From probe to action"
             id="how-heading"
             intro={
               <p>
-                A probe sits in the substrate bed. Operating over low-bandwidth 2G networks, the system will send an
+                A probe will sit in the substrate bed. Operating over low-bandwidth 2G networks, the system will send an
                 automated SMS alert to the facility operator, who can then adjust aeration and ventilation.
               </p>
             }
@@ -123,7 +123,7 @@ export default function Telemetry() {
         <div className="container-research">
           <SectionHeader
             eyebrow="Specification"
-            title="Hardware specification"
+            title="Planned hardware specification"
             id="spec-heading"
             intro={<p>Values marked {TBC} have not yet been confirmed and will be added when available.</p>}
           />

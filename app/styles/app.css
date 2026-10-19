@@ -98,7 +98,8 @@
   }
 
   .section {
-    @apply py-16 md:py-24 lg:py-28;
+    /* Half the brief's inter-section gap on each side: 64px mobile, 96px tablet, 128px desktop. */
+    @apply py-8 md:py-12 lg:py-16;
   }
 
   .label {

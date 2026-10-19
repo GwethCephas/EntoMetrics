@@ -8,7 +8,7 @@ const ROUTES = [
   { path: "/research/substrate-telemetry", h1: "Substrate Telemetry and Thermal-Stress Mitigation" },
   { path: "/research/welfare-indicators", h1: "Behavioural and Physiological Welfare Indicators" },
   { path: "/research/humane-slaughter", h1: "Humane Slaughter and Loss-of-Responsiveness Assays" },
-  { path: "/telemetry", h1: "Substrate monitoring that works offline" },
+  { path: "/telemetry", h1: "Substrate telemetry for tropical farms" },
   { path: "/contact", h1: "Collaboration enquiries" },
   { path: "/privacy", h1: "Privacy Policy" },
   { path: "/data-ethics", h1: "Data and Ethics Statement" },
@@ -98,6 +98,13 @@ test("navigation, active route and back/forward work", async ({ page }) => {
   await expect(page).toHaveURL(/\/research$/);
   await page.goForward();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Humane Slaughter and Loss-of-Responsiveness Assays");
+});
+
+test("hero 'View Our Programmes' scrolls to the programme grid", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "View Our Programmes" }).click();
+  await expect(page).toHaveURL(/#programmes$/);
+  await expect(page.locator("#programmes-heading")).toBeInViewport();
 });
 
 test("home page sections appear in the brief's order", async ({ page }) => {

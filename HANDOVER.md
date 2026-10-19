@@ -26,7 +26,7 @@ These items are missing, unconfirmed or depend on an interpretation. Each one ap
   - Formal research questions, plus Programme B's method and outputs, are placeholders.
 - **Header logo: horizontal lockup.**
   - Only a stacked logo was supplied. The header and footer use a **derived horizontal lockup**: the original mark and wordmark vectors side by side, with the wordmark scaled up as a unit so it is legible at 48px.
-  - Shapes and colours are unchanged. The client agreed to this approach in principle, but it needs **brand approval**.
+  - Shapes and colours are unchanged. **Deviation from the agreed plan:** the plan approved before the build said the mark and wordmark would keep their relative scale. At that scale the wordmark is only about 6px tall in a 48px header, so the wordmark was scaled up (about 2.2×) during the build. The client has not seen this lockup; it needs **client and brand approval**.
   - A designer-produced horizontal lockup can replace `app/assets/logo/logo-horizontal.svg`.
 - **Favicon.** The capsule and hexagons cropped from the mark (`public/favicon.svg`), with no redrawing. Needs approval, or supply an icon-only file.
 - **Reversed (white) logo.** Not supplied. The footer stays light rather than using a recoloured logo.

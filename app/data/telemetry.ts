@@ -25,8 +25,8 @@ export const telemetrySpecs: SpecRow[] = [
 ];
 
 export const pipeline = [
-  { id: "probe", label: "Probe in substrate", detail: "Measures substrate temperature in the rearing bed." },
-  { id: "gateway", label: "2G SMS gateway", detail: "Sends an automated SMS over low-bandwidth 2G networks." },
-  { id: "phone", label: "Operator phone", detail: "The facility operator receives the alert." },
-  { id: "action", label: "Action", detail: "The operator adjusts aeration and ventilation." },
+  { id: "probe", label: "Probe in substrate", detail: "Will measure substrate temperature in the rearing bed." },
+  { id: "gateway", label: "2G SMS gateway", detail: "Will send an automated SMS over low-bandwidth 2G networks." },
+  { id: "phone", label: "Operator phone", detail: "The facility operator will receive the alert." },
+  { id: "action", label: "Action", detail: "The operator can then adjust aeration and ventilation." },
 ] as const;

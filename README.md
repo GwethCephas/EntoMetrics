@@ -117,15 +117,18 @@ Nothing is required for local development. Never commit real values.
 
 | Name | Where | Secret | Purpose |
 | --- | --- | --- | --- |
-| `SITE_URL` | `wrangler.jsonc` `vars` / `.dev.vars` | no | Public origin, e.g. `https://entometrics.org`. Enables canonical URLs, absolute OG image and JSON-LD `url`. |
-| `CONTACT_TO_EMAIL` | `vars` / `.dev.vars` | no | Inbox that receives enquiries (once verified) |
-| `CONTACT_FROM_EMAIL` | `vars` / `.dev.vars` | no | Verified sender address at the email provider |
+| `SITE_URL` | `wrangler.jsonc` `vars` (production), `.dev.vars` (local) | no | Public origin, e.g. `https://entometrics.org`. Enables canonical URLs, absolute OG image and JSON-LD `url`. |
+| `CONTACT_TO_EMAIL` | `wrangler.jsonc` `vars`, `.dev.vars` | no | Inbox that receives enquiries (once verified) |
+| `CONTACT_FROM_EMAIL` | `wrangler.jsonc` `vars`, `.dev.vars` | no | Verified sender address at the email provider |
 | `RESEND_API_KEY` | `wrangler secret put` / `.dev.vars` | **yes** | Email delivery via the Resend API |
 | `TURNSTILE_SECRET_KEY` | `wrangler secret put` / `.dev.vars` | **yes** | Server-side Cloudflare Turnstile verification (optional) |
 | `VITE_TURNSTILE_SITE_KEY` | `.env` / build environment | no (public) | Shows the Turnstile widget (optional) |
 | `VITE_PLAUSIBLE_DOMAIN` | `.env` / build environment | no (public) | Enables Plausible analytics (optional, cookie-free) |
 
 Templates: [.dev.vars.example](.dev.vars.example) (server) and [.env.example](.env.example) (build time). `VITE_*` values are compiled into the browser bundle, so they must never hold secrets.
+
+- **Set non-secret production values in `wrangler.jsonc`, not the dashboard.** Every `wrangler deploy` (including Workers Builds) replaces dashboard-set variables with the values in `wrangler.jsonc`, so a value set only in the dashboard is lost on the next deploy. Secrets set with `wrangler secret put` are not affected.
+- **Turnstile keys go together.** Set `TURNSTILE_SECRET_KEY` and `VITE_TURNSTILE_SITE_KEY` together, or neither. With only the secret set, the widget doesn't render, so every submission fails verification and is rejected.
 
 ## Contact form behaviour
 
@@ -152,12 +155,12 @@ Nothing has been deployed yet. When you're ready:
    - The build writes `build/server/wrangler.json`, which `wrangler deploy` picks up automatically. It includes the static assets directory.
    - Alternatively, deploy from your machine with `npx wrangler login`, then `npm run deploy`.
 3. **Preview deployments.** Workers Builds creates a preview URL for each non-production branch or pull request. From the command line, `npm run deploy:preview` uploads a version without promoting it.
-4. **Configure variables and secrets.** Settings → Variables and Secrets, or:
+4. **Configure secrets.** Settings → Variables and Secrets, or:
    ```powershell
    npx wrangler secret put RESEND_API_KEY
    npx wrangler secret put TURNSTILE_SECRET_KEY   # optional
    ```
-   Set `SITE_URL`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in `wrangler.jsonc` `vars` or in the dashboard.
+   Set `SITE_URL`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in `wrangler.jsonc` `vars` and commit them. Don't set them in the dashboard: the next deploy would overwrite them. Set `VITE_TURNSTILE_SITE_KEY` and `VITE_PLAUSIBLE_DOMAIN` as build variables in Workers Builds, because they are compiled in at build time.
 5. **Connect the custom domain.** Once the domain is registered and on Cloudflare DNS: Worker → Settings → Domains & Routes → Add custom domain (e.g. `entometrics.org` and `www.entometrics.org`). Then set `SITE_URL` to match.
 6. **Set up email.**
    - Verify the sending domain with your provider (SPF, DKIM and DMARC DNS records).

@@ -28,3 +28,6 @@ lighthouse-*.json
 .DS_Store
 Thumbs.db
 *.log
+
+# local AI assistant notes (not tracked)
+CLAUDE.md

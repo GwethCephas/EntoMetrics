@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource/roboto-mono/latin-400.css";
+@import "@fontsource/roboto-mono/latin-500.css";
+
+/*
+ * Design tokens from the website brief (§2). Gold and Signal Teal are accents
+ * only: never body text or large fills on Laboratory White.
+ */
+@theme {
+  --color-forest: #15512d;
+  --color-forest-deep: #0f3d22;
+  --color-gold: #bd8d38;
+  --color-signal: #22a39f;
+  --color-ink: #1a252c;
+  --color-paper: #f8f9fa;
+  --color-ink-70: #4a565d;
+  --color-rule: #d9dee1;
+  --color-rule-strong: #7f8a90;
+
+  --font-sans: "Inter Variable", Inter, Roboto, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --ease-research: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --radius-card: 3px;
+
+  --text-label: 0.78125rem;
+  --text-label--letter-spacing: 0.06em;
+  --text-label--line-height: 1.4;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.125rem;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-forest;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: clamp(2.125rem, 1.4rem + 3vw, 3.25rem);
+    line-height: 1.12;
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.125rem);
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: clamp(1.1875rem, 1.1rem + 0.3vw, 1.3125rem);
+    line-height: 1.3;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-paper);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-signal) 30%, transparent);
+  }
+}
+
+@layer components {
+  .container-research {
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-8;
+    max-width: calc(1160px + 4rem);
+  }
+
+  .section {
+    @apply py-16 md:py-24 lg:py-28;
+  }
+
+  .label {
+    @apply font-mono text-label uppercase text-ink-70;
+  }
+
+  .text-link {
+    @apply text-forest underline decoration-1 underline-offset-4;
+    text-decoration-color: color-mix(in srgb, var(--color-forest) 40%, transparent);
+    transition: text-decoration-color 160ms var(--ease-research);
+  }
+
+  .text-link:hover {
+    text-decoration-color: var(--color-gold);
+  }
+
+  .card {
+    @apply rounded-[var(--radius-card)] border border-rule bg-white;
+    transition: border-color 160ms var(--ease-research);
+  }
+
+  .card-interactive:hover,
+  .card-interactive:focus-within {
+    @apply border-rule-strong;
+  }
+
+  .placeholder {
+    @apply font-mono text-[0.85em] text-ink-70;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent 0 6px,
+      color-mix(in srgb, var(--color-gold) 10%, transparent) 6px 12px
+    );
+    outline: 1px dashed var(--color-gold);
+    outline-offset: 1px;
+  }
+}
+
+/*
+ * Section fade-and-rise (brief §6). Content is only hidden once JS has marked
+ * the document, so it stays visible without JavaScript.
+ */
+[data-reveal] {
+  transition:
+    opacity 360ms var(--ease-research),
+    transform 360ms var(--ease-research);
+}
+
+.js [data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js [data-reveal="pending"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal] {
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

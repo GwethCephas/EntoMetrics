@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "entometrics-africa",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "upload_source_maps": true,
+  // Non-secret configuration. Leave values empty until confirmed.
+  // Secrets (RESEND_API_KEY, TURNSTILE_SECRET_KEY) are set with `wrangler secret put`.
+  "vars": {
+    "SITE_URL": "",
+    "CONTACT_TO_EMAIL": "",
+    "CONTACT_FROM_EMAIL": ""
+  }
+}

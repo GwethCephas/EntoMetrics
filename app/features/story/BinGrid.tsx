@@ -2,11 +2,11 @@ import { useAnimate } from "motion/react-mini";
 import { useEffect } from "react";
 import { BIN_STAGGER } from "./motion";
 
-const COLS = 10;
+const COLS = 12;
 const ROWS = 5;
-const SIZE = 30;
-const GAP = 10;
-const PAD = 20;
+const SIZE = 24;
+const GAP = 8;
+const PAD = 2;
 
 // Ordered column by column so the grid fills left to right.
 const bins = Array.from({ length: COLS * ROWS }, (_, i) => ({
@@ -38,13 +38,7 @@ export function BinGrid({ play, reduce }: BinGridProps) {
   }, [play, reduce, animate, scope]);
 
   return (
-    <svg
-      ref={scope}
-      viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-      className="h-auto w-full"
-      role="img"
-      aria-labelledby="bin-grid-title"
-    >
+    <svg ref={scope} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="h-auto w-full" role="img" aria-labelledby="bin-grid-title">
       <title id="bin-grid-title">
         Abstract grid of rearing bins filling from left to right, representing scaling demand.
       </title>
@@ -56,9 +50,8 @@ export function BinGrid({ play, reduce }: BinGridProps) {
           y={bin.y}
           width={SIZE}
           height={SIZE}
-          rx={2}
-          fill="#F8F9FA"
-          stroke="rgba(248,249,250,0.45)"
+          rx={1.5}
+          className="fill-paper stroke-paper/45"
           strokeWidth={1}
           style={{ fillOpacity: reduce ? 1 : 0 }}
         />

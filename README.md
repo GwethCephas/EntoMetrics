@@ -95,7 +95,8 @@ All copy lives in typed files under [app/data/](app/data/). Components read from
 | Team bios, photos, LinkedIn URLs | [app/data/team.ts](app/data/team.ts). Put photos in `app/assets/team/` |
 | Telemetry specification values | [app/data/telemetry.ts](app/data/telemetry.ts) |
 | Email, legal status, registration line | [app/data/site.ts](app/data/site.ts) |
-| Home page copy | [app/data/home.ts](app/data/home.ts), [app/data/story.ts](app/data/story.ts), [app/data/theoryOfChange.ts](app/data/theoryOfChange.ts) |
+| Home page copy (short previews) | [app/data/home.ts](app/data/home.ts), [app/data/story.ts](app/data/story.ts), `teaser` in [app/data/programmes.ts](app/data/programmes.ts) |
+| Institutional positioning (About H1 and lead) | [app/data/about.ts](app/data/about.ts) |
 
 **Content rules (brief §8)**
 
@@ -180,7 +181,7 @@ Nothing has been deployed yet. When you're ready:
 
 - [ ] **Domain:** `entometrics.org` registered, connected, `SITE_URL` set.
 - [ ] **Email:** `info@entometrics.org` working; provider domain verified; `site.emailVerified` set to `true` in `app/data/site.ts`; real test enquiry received.
-- [ ] **Legal:** registered legal form and number confirmed and added to `site.ts`. If not yet registered, change "non-profit research institution" to "independent research initiative" (hero copy in `app/data/home.ts` and `site.legalDescriptor`). Privacy Policy and Data and Ethics Statement reviewed and the "Draft" notices removed.
+- [ ] **Legal:** registered legal form and number confirmed and added to `site.ts`. If not yet registered, change "non-profit research institution" to "independent research initiative" (`positioning.statement` in `app/data/about.ts`). Privacy Policy and Data and Ethics Statement reviewed and the "Draft" notices removed.
 - [ ] **Science:** programme statuses and timeline stages confirmed; the Kenyan code-of-practice wording confirmed with KEBS; heat-mortality mechanism wording approved by the scientific advisor; threshold values remain provisional.
 - [ ] **Content:** all `[PLACEHOLDER …]`, `[PHOTO …]` and `[LINKEDIN …]` markers resolved (see HANDOVER.md).
 - [ ] **Forms:** production submission tested end to end, Turnstile and/or rate limiting enabled.

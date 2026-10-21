@@ -9,7 +9,7 @@ interface PillarCardsProps {
   reduce: boolean;
 }
 
-/** Beat 3: the three pillars fade up one after another. */
+/** Beat 3: the three pillars as a ruled list, fading up one after another. */
 export function PillarCards({ play, reduce }: PillarCardsProps) {
   const [scope, animate] = useAnimate<HTMLUListElement>();
 
@@ -24,19 +24,22 @@ export function PillarCards({ play, reduce }: PillarCardsProps) {
   }, [play, reduce, animate, scope]);
 
   return (
-    <ul ref={scope} className="grid gap-3">
-      {pillars.map((pillar) => (
+    <ul ref={scope} className="divide-y divide-paper/15 border-y border-paper/15">
+      {pillars.map((pillar, index) => (
         <li
           key={pillar.title}
           data-pillar
-          className="flex gap-4 rounded-[var(--radius-card)] border border-paper/25 bg-forest-deep/40 p-5"
+          className="grid grid-cols-[auto_1fr] gap-x-4 py-5 sm:grid-cols-[2.5rem_auto_1fr] sm:gap-x-5"
           style={reduce ? undefined : { opacity: 0, transform: `translateY(${RISE_DISTANCE}px)` }}
         >
-          <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-card)] border border-signal text-paper">
-            <PillarIcon name={pillar.icon} size={20} />
+          <span aria-hidden className="hidden pt-1 font-mono text-[0.75rem] text-paper/75 sm:block">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-signal text-paper">
+            <PillarIcon name={pillar.icon} size={18} />
           </span>
           <div>
-            <h4 className="text-lg !text-paper">{pillar.title}</h4>
+            <h4 className="!text-paper">{pillar.title}</h4>
             <p className="mt-1 text-[0.9375rem] text-paper/85">{pillar.description}</p>
           </div>
         </li>

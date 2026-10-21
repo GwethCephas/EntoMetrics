@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createRoutesStub } from "react-router";
+import { createRoutesStub, MemoryRouter } from "react-router";
 import { afterEach, describe, expect, it } from "vitest";
 import { Header } from "~/components/Header";
 import { RichText } from "~/components/RichText";
@@ -24,6 +24,8 @@ describe("StatusBadge and StatusTimeline", () => {
     const current = items.filter((li) => li.getAttribute("aria-current") === "step");
     expect(current).toHaveLength(1);
     expect(current[0]).toHaveTextContent("In preparation");
+    // Status is conveyed in text, not colour alone.
+    expect(current[0]).toHaveTextContent("Current stage");
   });
 });
 
@@ -36,9 +38,17 @@ describe("RichText", () => {
   });
 });
 
+// The story links to the Telemetry page, so it needs a router.
+const renderStory = () =>
+  render(
+    <MemoryRouter>
+      <AboutStory />
+    </MemoryRouter>,
+  );
+
 describe("AboutStory", () => {
   it("shows all three beats with the required caption", () => {
-    render(<AboutStory />);
+    renderStory();
     expect(screen.getByRole("heading", { name: "Demand is scaling." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "A critical blind spot." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Our approach." })).toBeInTheDocument();
@@ -48,16 +58,16 @@ describe("AboutStory", () => {
 
   it("offers Replay buttons that keep the visual in place", async () => {
     const user = userEvent.setup();
-    const { container } = render(<AboutStory />);
+    const { container } = renderStory();
     const replays = screen.getAllByRole("button", { name: /Replay animation/ });
     expect(replays).toHaveLength(3);
     await user.click(replays[0]!);
-    expect(container.querySelectorAll("[data-bin]")).toHaveLength(50);
+    expect(container.querySelectorAll("[data-bin]")).toHaveLength(60);
   });
 
   it("renders final states with no Replay under reduced motion", () => {
     setReducedMotion(true);
-    const { container } = render(<AboutStory />);
+    const { container } = renderStory();
     expect(screen.queryByRole("button", { name: /Replay animation/ })).not.toBeInTheDocument();
     const bin = container.querySelector<SVGRectElement>("[data-bin]")!;
     expect(bin.style.fillOpacity).toBe("1");

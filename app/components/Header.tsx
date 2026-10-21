@@ -4,8 +4,15 @@ import { NavLink, useLocation } from "react-router";
 import { primaryNav } from "~/data/nav";
 import { Logo } from "./Logo";
 
-const linkBase =
-  "relative inline-flex items-center py-2 text-[0.9375rem] font-medium text-ink transition-colors hover:text-forest";
+// Underline grows from the left on hover/focus; gold and full-width on the active route.
+const desktopLink = (isActive: boolean) =>
+  [
+    "relative inline-flex items-center py-2 text-[0.9375rem] font-medium transition-colors duration-150",
+    "after:absolute after:inset-x-0 after:-bottom-px after:h-px after:origin-left after:transition-transform after:duration-300 after:ease-[var(--ease-research)]",
+    isActive
+      ? "text-forest after:scale-x-100 after:bg-gold"
+      : "text-ink hover:text-forest after:scale-x-0 after:bg-forest/40 hover:after:scale-x-100 focus-visible:after:scale-x-100",
+  ].join(" ");
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -43,16 +50,7 @@ export function Header() {
           <ul className="flex items-center gap-7 lg:gap-9">
             {primaryNav.map((item) => (
               <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  className={({ isActive }) =>
-                    `${linkBase} ${
-                      isActive
-                        ? "text-forest after:absolute after:inset-x-0 after:-bottom-[1px] after:h-px after:bg-gold"
-                        : ""
-                    }`
-                  }
-                >
+                <NavLink to={item.to} className={({ isActive }) => desktopLink(isActive)}>
                   {item.label}
                 </NavLink>
               </li>
@@ -63,7 +61,7 @@ export function Header() {
         <button
           ref={buttonRef}
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-card)] border border-rule text-forest md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-card)] border border-rule text-forest transition-colors duration-150 hover:border-rule-strong active:translate-y-px md:hidden"
           aria-expanded={open}
           aria-controls={panelId}
           onClick={() => setOpen((value) => !value)}
@@ -73,37 +71,45 @@ export function Header() {
         </button>
       </div>
 
+      {/* Mobile panel: height and opacity transition; inert (unfocusable, hidden from AT) while closed. */}
       <div
         id={panelId}
         ref={panelRef}
-        hidden={!open}
-        className="border-t border-rule bg-paper md:hidden"
+        inert={!open}
+        className={`grid transition-[grid-template-rows,opacity,visibility] duration-200 ease-[var(--ease-research)] md:hidden ${
+          open ? "visible grid-rows-[1fr] opacity-100" : "invisible grid-rows-[0fr] opacity-0"
+        }`}
       >
-        <nav aria-label="Mobile" className="container-research py-3">
-          <ul className="flex flex-col">
-            {primaryNav.map((item) => (
-              <li key={item.to} className="border-b border-rule last:border-b-0">
-                <NavLink
-                  to={item.to}
-                  className={({ isActive }) =>
-                    `flex min-h-12 items-center justify-between py-3 text-base font-medium ${
-                      isActive ? "text-forest" : "text-ink"
-                    }`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      {item.label}
-                      {isActive ? (
-                        <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden />
-                      ) : null}
-                    </>
-                  )}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="overflow-hidden">
+          <nav aria-label="Mobile" className="container-research border-t border-rule py-2">
+            <ul className="flex flex-col">
+              {primaryNav.map((item) => (
+                <li key={item.to} className="border-b border-rule last:border-b-0">
+                  <NavLink
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `flex min-h-12 items-center justify-between py-3 text-base font-medium transition-colors duration-150 ${
+                        isActive ? "text-forest" : "text-ink hover:text-forest"
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {item.label}
+                        {isActive ? (
+                          <span className="inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-ink-70">
+                            <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden />
+                            Current
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
   );

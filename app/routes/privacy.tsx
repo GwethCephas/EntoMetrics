@@ -1,5 +1,4 @@
-import { DraftNotice } from "~/components/DraftNotice";
-import { PageHeader } from "~/components/PageHeader";
+import { PolicyPage, type PolicySection } from "~/components/PolicyPage";
 import { RichText } from "~/components/RichText";
 import { site } from "~/data/site";
 import { pageMeta } from "~/lib/meta";
@@ -11,7 +10,7 @@ export const meta: Route.MetaFunction = () =>
     description: "How the EntoMetrics Africa website handles personal information. Draft, to be reviewed.",
   });
 
-const sections: { heading: string; body: string[] }[] = [
+const sections: PolicySection[] = [
   {
     heading: "Who we are",
     body: [
@@ -58,25 +57,14 @@ const sections: { heading: string; body: string[] }[] = [
 
 export default function Privacy() {
   return (
-    <>
-      <PageHeader eyebrow="Policy" title="Privacy Policy">
-        <DraftNotice />
-      </PageHeader>
-      <div className="container-research section !pt-12">
-        <div className="max-w-3xl space-y-10">
-          {sections.map((section) => (
-            <section key={section.heading}>
-              <h2 className="text-[1.375rem]">{section.heading}</h2>
-              {section.body.map((paragraph) => (
-                <p key={paragraph} className="mt-3">
-                  <RichText text={paragraph} />
-                </p>
-              ))}
-            </section>
-          ))}
-          <p className="font-mono text-[0.8125rem] text-ink-70">Last updated: [PLACEHOLDER — date of approval]</p>
-        </div>
-      </div>
-    </>
+    <PolicyPage
+      title="Privacy Policy"
+      sections={sections}
+      footer={
+        <p className="font-mono text-[0.8125rem] text-ink-70">
+          Last updated: <RichText text="[PLACEHOLDER — date of approval]" />
+        </p>
+      }
+    />
   );
 }

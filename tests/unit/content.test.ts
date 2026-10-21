@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { positioning } from "~/data/about";
 import { PROGRAMME_STATUSES, programmes } from "~/data/programmes";
 import { theoryOfChange } from "~/data/theoryOfChange";
 import { team } from "~/data/team";
@@ -31,6 +32,23 @@ describe("content accuracy rules", () => {
   it("has four team members and no fabricated profile links", () => {
     expect(team.map((m) => m.name)).toEqual(["Clinton Adoga", "Paul Murani", "Mary Wairimu", "Fernán Gizzi"]);
     for (const m of team) expect(m.linkedin).toBeNull();
+  });
+
+  it("keeps the brief's exact positioning copy for the About page", () => {
+    expect(positioning.headline).toBe(
+      "Pioneering Black Soldier Fly welfare science, micro-climate telemetry, and humane rearing protocols in the Global South.",
+    );
+    expect(positioning.statement).toBe(
+      "EntoMetrics Africa is an independent, non-profit research institution headquartered in Nairobi, Kenya.",
+    );
+  });
+
+  it("gives every programme a short home-page teaser without forbidden labels", () => {
+    for (const p of programmes) {
+      expect(p.teaser.length).toBeGreaterThan(20);
+      expect(p.teaser.length).toBeLessThan(p.summary.length + 1);
+      expect(p.teaser).not.toMatch(FORBIDDEN);
+    }
   });
 
   it("has a five-stage theory of change", () => {

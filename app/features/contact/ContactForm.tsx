@@ -158,7 +158,7 @@ function ResultMessage({ result, ref }: { result: ContactResult | undefined; ref
   const toneClass = {
     success: "border-forest bg-forest/5",
     neutral: "border-gold bg-gold/10",
-    error: "border-[#9b2c2c] bg-[#9b2c2c]/5",
+    error: "border-danger bg-danger/5",
   }[tone];
 
   return (
@@ -174,7 +174,7 @@ function ResultMessage({ result, ref }: { result: ContactResult | undefined; ref
 }
 
 const inputClass =
-  "mt-2 block w-full rounded-[var(--radius-card)] border bg-white px-3.5 py-3 text-base text-ink placeholder:text-ink-70/70 focus:border-forest focus:outline-2 focus:outline-offset-0 focus:outline-forest aria-[invalid=true]:border-[#9b2c2c]";
+  "mt-2 block w-full rounded-[var(--radius-card)] border bg-white px-3.5 py-3 text-base text-ink placeholder:text-ink-70/70 focus:border-forest focus:outline-2 focus:outline-offset-0 focus:outline-forest aria-[invalid=true]:border-danger";
 
 interface BaseFieldProps {
   label: string;
@@ -207,7 +207,7 @@ function FieldShell({
       </label>
       {children}
       {error ? (
-        <p id={`${id}-error`} className="mt-1.5 text-[0.875rem] text-[#9b2c2c]">
+        <p id={`${id}-error`} className="mt-1.5 text-[0.875rem] text-danger">
           {error}
         </p>
       ) : null}
@@ -230,7 +230,7 @@ function Field({
         aria-invalid={props.error ? true : undefined}
         aria-describedby={props.error ? `${id}-error` : undefined}
         aria-required={props.required || undefined}
-        className={`${inputClass} ${props.error ? "border-[#9b2c2c]" : "border-rule-strong"}`}
+        className={`${inputClass} ${props.error ? "border-danger" : "border-rule-strong"}`}
         {...props.registration}
       />
     </FieldShell>
@@ -247,7 +247,7 @@ function SelectField(props: BaseFieldProps) {
         aria-describedby={props.error ? `${id}-error` : undefined}
         aria-required
         defaultValue=""
-        className={`${inputClass} ${props.error ? "border-[#9b2c2c]" : "border-rule-strong"}`}
+        className={`${inputClass} ${props.error ? "border-danger" : "border-rule-strong"}`}
         {...props.registration}
       >
         <option value="" disabled>
@@ -273,7 +273,7 @@ function TextAreaField(props: BaseFieldProps) {
         aria-invalid={props.error ? true : undefined}
         aria-describedby={props.error ? `${id}-error` : undefined}
         aria-required
-        className={`${inputClass} ${props.error ? "border-[#9b2c2c]" : "border-rule-strong"}`}
+        className={`${inputClass} ${props.error ? "border-danger" : "border-rule-strong"}`}
         {...props.registration}
       />
     </FieldShell>

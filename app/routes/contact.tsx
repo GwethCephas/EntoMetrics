@@ -38,16 +38,16 @@ export default function Contact({ loaderData }: Route.ComponentProps) {
       <section aria-label="Contact form and details" className="section">
         <div className="container-research grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <h2 className="mb-6 text-[1.5rem]">Send an enquiry</h2>
+            <h2 className="mb-8 text-[clamp(1.375rem,1.2rem+0.7vw,1.625rem)]">Send an enquiry</h2>
             <ContactForm emailConfigured={loaderData.emailConfigured} />
           </div>
 
           <aside aria-labelledby="details-heading" className="lg:col-span-4 lg:col-start-9">
-            <div className="card p-6">
+            <div className="border-t border-ink/15 pt-6 lg:sticky lg:top-28">
               <h2 id="details-heading" className="text-[1.25rem]">
                 Details
               </h2>
-              <dl className="mt-5 space-y-5 text-[0.9375rem]">
+              <dl className="mt-6 divide-y divide-rule text-[0.9375rem] [&>div]:py-4 [&>div:first-child]:pt-0">
                 <div>
                   <dt className="label flex items-center gap-2">
                     <Mail aria-hidden size={14} /> Email

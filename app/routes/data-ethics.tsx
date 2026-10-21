@@ -1,6 +1,4 @@
-import { DraftNotice } from "~/components/DraftNotice";
-import { PageHeader } from "~/components/PageHeader";
-import { RichText } from "~/components/RichText";
+import { PolicyPage, type PolicySection } from "~/components/PolicyPage";
 import { protocolsNote } from "~/data/home";
 import { ILLUSTRATIVE_CAPTION } from "~/data/site";
 import { governanceStatement } from "~/data/team";
@@ -14,7 +12,7 @@ export const meta: Route.MetaFunction = () =>
       "How EntoMetrics Africa pre-specifies protocols, reports status honestly and handles research data. Draft, to be reviewed.",
   });
 
-const sections: { heading: string; body: string[] }[] = [
+const sections: PolicySection[] = [
   {
     heading: "Pre-specification",
     body: [protocolsNote, governanceStatement],
@@ -47,24 +45,9 @@ const sections: { heading: string; body: string[] }[] = [
 
 export default function DataEthics() {
   return (
-    <>
-      <PageHeader eyebrow="Policy" title="Data and Ethics Statement">
-        <DraftNotice />
-      </PageHeader>
-      <div className="container-research section !pt-12">
-        <div className="max-w-3xl space-y-10">
-          {sections.map((section) => (
-            <section key={section.heading}>
-              <h2 className="text-[1.375rem]">{section.heading}</h2>
-              {section.body.map((paragraph) => (
-                <p key={paragraph} className="mt-3">
-                  <RichText text={paragraph} />
-                </p>
-              ))}
-            </section>
-          ))}
-        </div>
-      </div>
-    </>
+    <PolicyPage
+      title="Data and Ethics Statement"
+      sections={sections}
+    />
   );
 }

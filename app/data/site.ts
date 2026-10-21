@@ -10,11 +10,6 @@ export const site = {
   email: "info@entometrics.org",
   emailVerified: false,
   linkedin: "https://www.linkedin.com/company/entometrics-africa/",
-  /**
-   * The brief's wording. If the organisation is not yet registered as a
-   * non-profit, change to "independent research initiative" (brief §9).
-   */
-  legalDescriptor: "independent, non-profit research institution",
   legalStatus: {
     organisationType: "[PLACEHOLDER — CONFIRM WITH CLIENT: registered legal form]",
     registrationNumber: "[PLACEHOLDER — CONFIRM WITH CLIENT: registration number]",

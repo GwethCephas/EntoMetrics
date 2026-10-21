@@ -34,6 +34,8 @@ export interface Programme {
   stage: TimelineStage;
   /** Card text, verbatim from the brief. */
   summary: string;
+  /** One-sentence home page preview, condensed from the card text. */
+  teaser: string;
   question: string[];
   method: string[];
   plannedOutputs: string[];
@@ -50,6 +52,8 @@ export const programmes: Programme[] = [
     status: "PILOT IN PREPARATION",
     badgeTone: "gold",
     stage: "in-preparation",
+    teaser:
+      "Developing offline-first substrate probes designed to send SMS alerts when bed temperatures exceed critical thresholds.",
     summary:
       "Intensive larval rearing generates concentrated metabolic heat. When dense substrate beds exceed critical temperature thresholds, large numbers of larvae can die unmonitored. We are developing ruggedised, offline-first substrate probes for tropical farm conditions. Operating over low-bandwidth 2G networks, the system will send automated SMS alerts to facility operators so they can adjust aeration and ventilation. Data from the pilot is intended to inform practical, evidence-based guidance for Kenya’s national code of practice for Black Soldier Fly farming.",
     question: [
@@ -61,6 +65,7 @@ export const programmes: Programme[] = [
       "Planned activities: deploy offline SMS temperature sensors; onboard pilot facilities with a baseline period; count mortality using a standard protocol.",
       "Temperature thresholds are provisional until confirmed against the published literature.",
       "If baseline thermal-stress mortality proves negligible, the programme shifts emphasis to the slaughter assays and standardisation work.",
+      "Data from the pilot is intended to inform practical, evidence-based guidance for Kenya’s national code of practice for Black Soldier Fly farming.",
     ],
     plannedOutputs: ["An alert system", "A micro-climate dataset", "Published protocols"],
     protocolLinks: [],
@@ -72,6 +77,7 @@ export const programmes: Programme[] = [
     status: "IN DEVELOPMENT",
     badgeTone: "grey",
     stage: "planned",
+    teaser: "Developing low-cost on-farm tools to assess physiological and behavioural welfare indicators.",
     summary:
       "Developing scalable, low-cost on-farm assessment tools to map physiological and behavioural welfare indicators across the larval life cycle.",
     question: [
@@ -89,6 +95,7 @@ export const programmes: Programme[] = [
     status: "METHODOLOGY IN DEVELOPMENT",
     badgeTone: "grey",
     stage: "planned",
+    teaser: "A planned randomised comparison of common harvest methods against pre-specified behavioural endpoints.",
     summary:
       "Planned randomised comparison of common commercial harvest methods (boiling, blanching, rapid cooling) against pre-specified behavioural endpoints, including time to irreversible loss of responsiveness.",
     question: [

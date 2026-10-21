@@ -1,38 +1,19 @@
 import { LinkedInIcon } from "~/components/icons";
-import { Reveal } from "~/components/Reveal";
 import { SectionHeader } from "~/components/ui";
 import { governanceStatement, team, type TeamMember } from "~/data/team";
+import { TeamPhoto } from "./TeamPhoto";
 
-function TeamCard({ member }: { member: TeamMember }) {
+function TeamMemberEntry({ member }: { member: TeamMember }) {
   return (
-    <li className="card flex h-full flex-col overflow-hidden">
-      {member.photo ? (
-        <picture>
-          <source srcSet={member.photo.webp} type="image/webp" />
-          <img
-            src={member.photo.jpg}
-            alt={`Portrait of ${member.name}`}
-            width={480}
-            height={480}
-            loading="lazy"
-            decoding="async"
-            className="aspect-square w-full bg-rule object-cover"
-          />
-        </picture>
-      ) : (
-        <div
-          role="img"
-          aria-label={`Photo of ${member.name} to be supplied`}
-          className="flex aspect-square w-full items-center justify-center bg-ink-70 p-4 text-center font-mono text-[0.75rem] text-paper"
-        >
-          [PHOTO: {member.name}]
-        </div>
-      )}
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="text-[1.0625rem] sm:text-lg">{member.name}</h3>
-        <p className="mt-1 font-mono text-[0.75rem] uppercase tracking-[0.06em] text-ink-70">{member.role}</p>
-        <p className="mt-3 flex-1 text-[0.875rem] leading-relaxed text-ink sm:text-[0.9375rem]">{member.bio}</p>
-        <div className="mt-4 border-t border-rule pt-3">
+    <li className="grid grid-cols-[5.5rem_1fr] gap-x-5 border-t border-rule pt-6 sm:grid-cols-[7rem_1fr] lg:block lg:border-t-0 lg:pt-0">
+      <TeamPhoto member={member} />
+      <div className="lg:mt-5">
+        <h3>{member.name}</h3>
+        <p className="mt-1 font-mono text-[0.6875rem] uppercase leading-relaxed tracking-[0.06em] text-ink-70">
+          {member.role}
+        </p>
+        <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink">{member.bio}</p>
+        <div className="mt-3">
           {member.linkedin ? (
             <a
               href={member.linkedin}
@@ -45,7 +26,7 @@ function TeamCard({ member }: { member: TeamMember }) {
             </a>
           ) : (
             <span className="placeholder inline-flex items-center gap-2 text-[0.6875rem]">
-              <LinkedInIcon width={13} height={13} />
+              <LinkedInIcon width={12} height={12} />
               [LINKEDIN: to be supplied]
             </span>
           )}
@@ -55,21 +36,21 @@ function TeamCard({ member }: { member: TeamMember }) {
   );
 }
 
-export function TeamGrid({ headingAs = "h2" }: { headingAs?: "h2" | "h1" }) {
+/** Full team section for the About page: photos, roles, bios, governance. */
+export function TeamGrid() {
   return (
-    <section aria-labelledby="team-heading" className="section border-t border-rule">
+    <section id="team" aria-labelledby="team-heading" className="section">
       <div className="container-research">
-        <SectionHeader eyebrow="People" title="Team" id="team-heading" as={headingAs} />
-        <Reveal>
-          <ul className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-            {team.map((member) => (
-              <TeamCard key={member.name} member={member} />
-            ))}
-          </ul>
-          <p className="mt-8 max-w-4xl border-l-2 border-forest pl-4 text-[0.9375rem] italic text-ink-70">
-            {governanceStatement}
-          </p>
-        </Reveal>
+        <SectionHeader index="People" title="Team" id="team-heading" />
+        <ul className="mt-10 grid gap-6 lg:grid-cols-4 lg:gap-8">
+          {team.map((member) => (
+            <TeamMemberEntry key={member.name} member={member} />
+          ))}
+        </ul>
+        <figure className="mt-12 grid gap-4 border-t border-ink/15 pt-6 md:grid-cols-12 md:gap-8">
+          <figcaption className="label md:col-span-4">Year 1 governance</figcaption>
+          <blockquote className="measure text-lead text-ink md:col-span-7 md:col-start-6">{governanceStatement}</blockquote>
+        </figure>
       </div>
     </section>
   );

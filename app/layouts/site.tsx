@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { isRouteErrorResponse, Link, Outlet } from "react-router";
+import { useState, type ReactNode } from "react";
+import { isRouteErrorResponse, Link, Outlet, useLocation } from "react-router";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
 import { ButtonLink } from "~/components/ui";
@@ -24,9 +24,20 @@ function Shell({ children }: { children: ReactNode }) {
 }
 
 export default function SiteLayout() {
+  const { pathname } = useLocation();
+  // Animate route entry only after the first client-side navigation, so the
+  // initial page load (and its LCP) is never held back. Decided during render
+  // so the new route never paints once before the animation starts.
+  const [firstPath] = useState(pathname);
+  const [navigated, setNavigated] = useState(false);
+  if (!navigated && pathname !== firstPath) setNavigated(true);
+
   return (
     <Shell>
-      <Outlet />
+      {/* Remounts per route so the short CSS entry animation replays; hash links on the same page don't. */}
+      <div key={pathname} className={navigated ? "page-enter" : undefined}>
+        <Outlet />
+      </div>
     </Shell>
   );
 }

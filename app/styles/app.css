@@ -4,10 +4,17 @@
 @import "@fontsource/roboto-mono/latin-500.css";
 
 /*
- * Design tokens from the website brief (§2). Gold and Signal Teal are accents
- * only: never body text or large fills on Laboratory White.
+ * Design tokens. Brand colours come from the website brief (§2); semantic
+ * tokens below them describe how the brand colours are used.
+ *
+ * Usage rules:
+ * - forest: brand, H1/H2, primary actions, the one dark panel per page.
+ * - gold: small accents only (current status, threshold, hover underline).
+ * - signal (teal): telemetry traces and diagram connectors only.
+ * - Gold and teal are never used for text on light backgrounds.
  */
 @theme {
+  /* Brand */
   --color-forest: #15512d;
   --color-forest-deep: #0f3d22;
   --color-gold: #bd8d38;
@@ -16,17 +23,33 @@
   --color-paper: #f8f9fa;
   --color-ink-70: #4a565d;
   --color-rule: #d9dee1;
-  --color-rule-strong: #7f8a90;
 
+  /* Semantic */
+  --color-surface: #ffffff;
+  --color-sunken: #eff2f1;
+  --color-rule-strong: #7f8a90;
+  --color-danger: #9b2c2c;
+  --color-focus: #15512d;
+
+  /* Typography */
   --font-sans: "Inter Variable", Inter, Roboto, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  --ease-research: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --radius-card: 3px;
-
-  --text-label: 0.78125rem;
+  --text-label: 0.75rem;
   --text-label--letter-spacing: 0.06em;
   --text-label--line-height: 1.4;
+  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-lead--line-height: 1.5;
+
+  /* Shape and motion */
+  --radius-card: 3px;
+  --ease-research: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root {
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 700ms;
+  --measure: 65ch;
 }
 
 @layer base {
@@ -38,7 +61,8 @@
   body {
     @apply bg-paper font-sans text-ink antialiased;
     font-size: 1.0625rem;
-    line-height: 1.55;
+    line-height: 1.6;
+    font-feature-settings: "cv11", "ss01";
   }
 
   @media (min-width: 768px) {
@@ -51,25 +75,38 @@
   h2,
   h3,
   h4 {
-    @apply text-forest;
-    font-weight: 600;
-    letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
   h1 {
-    font-size: clamp(2.125rem, 1.4rem + 3vw, 3.25rem);
-    line-height: 1.12;
+    @apply text-forest;
+    font-size: clamp(2.25rem, 1.45rem + 3.1vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.028em;
   }
 
   h2 {
-    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.125rem);
-    line-height: 1.2;
+    @apply text-forest;
+    font-size: clamp(1.625rem, 1.3rem + 1.25vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
 
   h3 {
-    font-size: clamp(1.1875rem, 1.1rem + 0.3vw, 1.3125rem);
+    @apply text-ink;
+    font-size: clamp(1.125rem, 1.07rem + 0.25vw, 1.25rem);
+    font-weight: 600;
     line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  h4 {
+    @apply text-ink;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   p {
@@ -77,7 +114,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-forest);
+    outline: 2px solid var(--color-focus);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -87,7 +124,7 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--color-signal) 30%, transparent);
+    background: color-mix(in srgb, var(--color-signal) 28%, transparent);
   }
 }
 
@@ -106,24 +143,40 @@
     @apply font-mono text-label uppercase text-ink-70;
   }
 
-  .text-link {
-    @apply text-forest underline decoration-1 underline-offset-4;
-    text-decoration-color: color-mix(in srgb, var(--color-forest) 40%, transparent);
-    transition: text-decoration-color 160ms var(--ease-research);
+  .measure {
+    max-width: var(--measure);
   }
 
-  .text-link:hover {
+  .text-link {
+    @apply text-forest underline decoration-1 underline-offset-4;
+    text-decoration-color: color-mix(in srgb, var(--color-forest) 35%, transparent);
+    transition: text-decoration-color var(--duration-fast) var(--ease-research);
+  }
+
+  .text-link:hover,
+  .text-link:focus-visible {
     text-decoration-color: var(--color-gold);
   }
 
   .card {
-    @apply rounded-[var(--radius-card)] border border-rule bg-white;
-    transition: border-color 160ms var(--ease-research);
+    @apply rounded-[var(--radius-card)] border border-rule bg-surface;
+    transition: border-color var(--duration-fast) var(--ease-research);
   }
 
   .card-interactive:hover,
   .card-interactive:focus-within {
     @apply border-rule-strong;
+  }
+
+  /* Arrow that nudges on hover/focus of its nearest `.group` ancestor. */
+  .nudge {
+    transition: transform var(--duration-fast) var(--ease-research);
+  }
+
+  .group:hover .nudge,
+  .group:focus-visible .nudge,
+  .group:focus-within .nudge {
+    transform: translateX(3px);
   }
 
   .placeholder {
@@ -136,11 +189,41 @@
     outline: 1px dashed var(--color-gold);
     outline-offset: 1px;
   }
+
+  /* Long-form text (programme pages, policies). */
+  .prose-research {
+    max-width: var(--measure);
+  }
+
+  .prose-research > * + * {
+    margin-top: 1em;
+  }
+
+  .prose-research h2 {
+    font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem);
+    margin-top: 2.5rem;
+  }
+
+  .prose-research h2 + * {
+    margin-top: 0.75rem;
+  }
+}
+
+/* Route entry: short fade and rise; content is never held back. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.page-enter {
+  animation: page-enter var(--duration-base) var(--ease-research) both;
 }
 
 /*
- * Section fade-and-rise (brief §6). Content is only hidden once JS has marked
- * the document, so it stays visible without JavaScript.
+ * Fade-and-rise for visual blocks (brief §6). Content is only hidden once JS
+ * has marked the document, so it stays visible without JavaScript.
  */
 [data-reveal] {
   transition:
@@ -153,9 +236,24 @@
   transform: translateY(12px);
 }
 
+/* Diagram connectors draw once when their Reveal container enters view. */
+[data-reveal] .draw-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--duration-slow) var(--ease-research) 200ms;
+}
+
+.js [data-reveal="pending"] .draw-line {
+  stroke-dashoffset: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .page-enter {
+    animation: none;
   }
 
   .js [data-reveal="pending"] {
@@ -163,7 +261,12 @@
     transform: none;
   }
 
-  [data-reveal] {
+  .js [data-reveal="pending"] .draw-line {
+    stroke-dashoffset: 0;
+  }
+
+  [data-reveal],
+  [data-reveal] .draw-line {
     transition: none;
   }
 

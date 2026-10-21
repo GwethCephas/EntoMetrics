@@ -2,8 +2,9 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 const ROUTES = [
-  { path: "/", h1: /Pioneering Black Soldier Fly welfare science/ },
-  { path: "/about", h1: /independent research organisation/i },
+  { path: "/", h1: "Advancing insect welfare through science and sensing." },
+  // The brief's full positioning headline lives on About since the home hero was shortened.
+  { path: "/about", h1: /^Pioneering Black Soldier Fly welfare science, micro-climate telemetry, and humane rearing protocols in the Global South\.$/ },
   { path: "/research", h1: "Research programmes" },
   { path: "/research/substrate-telemetry", h1: "Substrate Telemetry and Thermal-Stress Mitigation" },
   { path: "/research/welfare-indicators", h1: "Behavioural and Physiological Welfare Indicators" },
@@ -100,27 +101,49 @@ test("navigation, active route and back/forward work", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Humane Slaughter and Loss-of-Responsiveness Assays");
 });
 
-test("hero 'View Our Programmes' scrolls to the programme grid", async ({ page }) => {
+test("hero 'Our approach' scrolls to the About story", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "View Our Programmes" }).click();
-  await expect(page).toHaveURL(/#programmes$/);
-  await expect(page.locator("#programmes-heading")).toBeInViewport();
+  await page.getByRole("link", { name: "Our approach" }).click();
+  await expect(page).toHaveURL(/#about$/);
+  await expect(page.locator("#about-heading")).toBeInViewport();
+});
+
+test("home previews link to the full content", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Meet the team" }).click();
+  await expect(page).toHaveURL(/\/about#team$/);
+  await expect(page.locator("#team-heading")).toBeInViewport();
+  await expect(page.getByText("Founder and programme builder who has led national innovation programmes")).toBeVisible();
+
+  await page.goto("/");
+  await page.getByRole("link", { name: "See the full theory of change" }).click();
+  await expect(page).toHaveURL(/\/research#theory-of-change$/);
+  await expect(page.locator("#toc-heading")).toBeInViewport();
+  await expect(page.getByText("pilot facilities agree to participate")).toBeVisible();
 });
 
 test("home page sections appear in the brief's order", async ({ page }) => {
   await page.goto("/");
   const tops = await page.evaluate(() => {
-    const order = ["#hero-heading", "#about-heading", "#programmes-heading", "#toc-heading", "#team-heading", "#collab-heading"];
+    const order = [
+      "#hero-heading",
+      "#about-heading",
+      "#mission-heading",
+      "#programmes-heading",
+      "#toc-heading",
+      "#team-heading",
+      "#collab-heading",
+    ];
     return order.map((sel) => document.querySelector(sel)!.getBoundingClientRect().top + window.scrollY);
   });
   expect([...tops].sort((a, b) => a - b)).toEqual(tops);
-  await expect(page.getByRole("heading", { name: "Our Mission" })).toBeAttached();
+  await expect(page.getByText("To reduce systemic welfare risks in insect bioconversion systems…")).toBeVisible();
   await expect(
     page.getByText("Protocols and statistical analysis plans will be published before data collection begins.").first(),
   ).toBeAttached();
 });
 
-for (const width of [360, 768, 1024, 1440]) {
+for (const width of [360, 390, 768, 1024, 1440]) {
   test(`no horizontal overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ROUTES) {

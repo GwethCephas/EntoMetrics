@@ -19,6 +19,8 @@ SIZE = 480
 CROPS = {
     "fernan-gizzi": (60, 0, 600),
     "clinton-adoga": (68, 30, 760),
+    "paul-murani": (0, 0, 1254),
+    "mary-wairimu": (0, 60, 1098),
 }
 
 

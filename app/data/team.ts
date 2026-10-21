@@ -2,6 +2,10 @@ import clintonJpg from "~/assets/team/clinton-adoga.jpg";
 import clintonWebp from "~/assets/team/clinton-adoga.webp";
 import fernanJpg from "~/assets/team/fernan-gizzi.jpg";
 import fernanWebp from "~/assets/team/fernan-gizzi.webp";
+import maryJpg from "~/assets/team/mary-wairimu.jpg";
+import maryWebp from "~/assets/team/mary-wairimu.webp";
+import paulJpg from "~/assets/team/paul-murani.jpg";
+import paulWebp from "~/assets/team/paul-murani.webp";
 
 export interface TeamPhoto {
   webp: string;
@@ -30,14 +34,14 @@ export const team: TeamMember[] = [
     name: "Paul Murani",
     role: "IoT and Systems Engineer",
     bio: "Systems and data engineer with 5+ years building field-telemetry and remote-endpoint data systems; BEng, Electrical and Electronics Engineering, University of Nairobi.",
-    photo: null,
+    photo: { webp: paulWebp, jpg: paulJpg },
     linkedin: null,
   },
   {
     name: "Mary Wairimu",
     role: "Operations and Field Data Lead",
     bio: "Epidemiology graduate (Masinde Muliro University of Science and Technology) experienced in health-data collection, monitoring and reporting.",
-    photo: null,
+    photo: { webp: maryWebp, jpg: maryJpg },
     linkedin: null,
   },
   {

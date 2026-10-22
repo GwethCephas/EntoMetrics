@@ -12,7 +12,7 @@ export function TeamPhoto({ member, className = "" }: { member: TeamMember; clas
       <div
         role="img"
         aria-label={member.name}
-        className={`flex aspect-square w-full items-center justify-center rounded-[var(--radius-card)] bg-sunken text-2xl font-medium text-forest ${className}`}
+        className={`flex aspect-square w-full items-center justify-center rounded-[var(--radius-card)] bg-sunken text-3xl font-medium tracking-[-0.02em] text-forest sm:text-4xl lg:text-7xl ${className}`}
       >
         {initials}
       </div>

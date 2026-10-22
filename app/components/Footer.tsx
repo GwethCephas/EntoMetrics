@@ -24,7 +24,7 @@ export function Footer() {
     <footer className="border-t border-rule bg-surface">
       <div className="container-research grid gap-12 py-14 md:py-16 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-4">
-          <Logo height={48} className="inline-block rounded-sm" />
+          <Logo variant="stacked" height={184} className="inline-block rounded-sm" />
           <p className="mt-5 max-w-xs text-[0.9375rem] leading-relaxed text-ink-70">
             Black Soldier Fly welfare science, micro-climate telemetry and humane rearing protocols.
           </p>
@@ -70,7 +70,7 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href={`mailto:${site.email}`} className={`${footerLink} [overflow-wrap:anywhere]`}>
+              <a href={`mailto:${site.email}`} className={`${footerLink} text-[0.78125rem] [overflow-wrap:anywhere] min-[380px]:text-[0.84375rem] sm:text-[0.9375rem]`}>
                 {site.email}
               </a>
             </li>

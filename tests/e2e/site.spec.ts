@@ -5,6 +5,7 @@ const ROUTES = [
   { path: "/", h1: "Advancing insect welfare through science and sensing." },
   // The brief's full positioning headline lives on About since the home hero was shortened.
   { path: "/about", h1: /^Pioneering Black Soldier Fly welfare science, micro-climate telemetry, and humane rearing protocols in the Global South\.$/ },
+  { path: "/team", h1: "Meet the team" },
   { path: "/research", h1: "Research programmes" },
   { path: "/research/substrate-telemetry", h1: "Substrate Telemetry and Thermal-Stress Mitigation" },
   { path: "/research/welfare-indicators", h1: "Behavioural and Physiological Welfare Indicators" },
@@ -138,10 +139,17 @@ test("home page sections appear in the brief's order", async ({ page }) => {
   await expect(page.locator("#team-heading")).toHaveCount(0);
 });
 
-test("About page shows the team with LinkedIn profiles", async ({ page }) => {
-  await page.goto("/about#team");
-  await expect(page.locator("#team-heading")).toBeVisible();
-  await expect(page.locator("#team a[href^='https://www.linkedin.com/in/']")).toHaveCount(5);
+test("Team page lists everyone with LinkedIn and no background bios", async ({ page }) => {
+  await page.goto("/team");
+  await expect(page.getByRole("heading", { level: 2 })).toHaveCount(5);
+  await expect(page.locator("main a[href^='https://www.linkedin.com/in/']")).toHaveCount(5);
+  await expect(page.getByText("Background ·")).toHaveCount(0);
+  await expect(page.getByRole("img", { name: "Cephas Gweth" })).toHaveText("CG");
+
+  // Team is its own page now, not a section of About.
+  await page.goto("/about");
+  await expect(page.locator("main a[href^='https://www.linkedin.com/in/']")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Independence and pre-specification" })).toBeVisible();
 });
 
 test("no bracketed placeholder text appears on any page", async ({ page }) => {

@@ -3,11 +3,12 @@ export interface NavItem {
   to: string;
 }
 
-// Order requested by the client (differs from brief §3, which put About Us first).
+// Order requested by the client (differs from brief §3: About Us was first and Team was part of it).
 export const primaryNav: NavItem[] = [
   { label: "Research Hub", to: "/research" },
   { label: "Our Telemetry Tech", to: "/telemetry" },
   { label: "About Us", to: "/about" },
+  { label: "Team", to: "/team" },
   { label: "Contact", to: "/contact" },
 ];
 

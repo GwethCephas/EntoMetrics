@@ -5,6 +5,7 @@ export function publicPaths(): string[] {
   return [
     "/",
     "/about",
+    "/team",
     "/research",
     ...programmes.map((p) => `/research/${p.slug}`),
     "/telemetry",

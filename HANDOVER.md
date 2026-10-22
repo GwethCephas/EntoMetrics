@@ -50,17 +50,13 @@ The site no longer shows bracketed placeholders or the "Illustrative visualisati
   - Built only from the brief's card text and the Theory of Change lines.
   - Programme C's question ("Which harvest method ends responsiveness fastest?") is taken from the Theory of Change outcome.
   - Formal research questions, plus Programme B's method and outputs, are placeholders.
-- **Logo (v2, supplied as a JPEG).** The client's updated logo image (`docs/source/entometrics-africa-logo-v2.jpg`) replaced the original PDF artwork. `scripts/process-logo.py` removes its background without recolouring and builds:
-  - the header/footer **horizontal lockup**: the original mark, scaled down, beside the original wordmark (a derived arrangement, as before);
-  - the **favicon** and Apple touch icon (capsule and hexagons, cropped);
-  - the **social preview image** (`public/og-image.png`).
-  A vector (SVG) or high-resolution transparent PNG of the new logo would give sharper results on large screens; drop it in and re-run the script.
+- **Logo (supplied as JPEGs).** Two client images in `docs/source/`: the stacked logo (footer, favicon, social preview, structured-data logo) and the horizontal logo with the tagline "Precision Insect Welfare Telemetry". The header recreates that logo: the emblem image plus "EntoMetrics Africa" and the tagline as live text in the logo's sampled colours, because the tagline was illegible when the image was shrunk to header size. `scripts/process-logo.py` removes their backgrounds without recolouring. SVG or high-resolution transparent PNG versions of the logos would be sharper; drop them in and re-run the script.
 - **Reversed (white) logo.** Not supplied. The footer stays light rather than using a recoloured logo.
 - **Logo colours versus the brief's tokens.**
   - The logo artwork has its own colours (e.g. a darker wordmark green). The site UI uses the brief's tokens #15512D and #BD8D38.
   - The logo keeps its own colours and the UI uses the brief's tokens. Confirm the master values.
 - **Section headings not specified in the brief.** These are labels only and make no claims; adjust as you like: "Why this work matters" (home About story), "Research programmes", "Theory of Change", "Team", "Work with us", the figure labels in the story ("Fig. 1 · Rearing capacity (abstract)", "Fig. 2 · Substrate temperature against a provisional threshold"), and the Telemetry page headings.
-- **Navigation order.** At the client's request the header reads Research Hub · Our Telemetry Tech · About Us · Contact. Brief §3 had About Us first. Change it in `app/data/nav.ts`.
+- **Navigation order and Team page.** At the client's request the header reads Research Hub · Our Telemetry Tech · About Us · Team · Contact, and the team has its own page (`/team`) showing each person's role and responsibilities only (background bios removed). Brief §3 had About Us first with the team inside it. Change it in `app/data/nav.ts`.
 - **Animated story layout.** Brief §4.3 stacks the story below 768px, with each beat about one viewport tall. The story now stacks below 1024px, because at tablet widths the trace's SVG labels became illegible beside the text column. Each beat is about 65% of the viewport tall on desktop, to avoid large empty gaps.
 - **Hero eyebrow repeats the status strip.** The new hero eyebrow ("Independent research · Nairobi, Kenya") repeats two of the three items in the brief's status strip directly below it. Both are kept: the strip is required by the brief, and the eyebrow was requested copy. Remove one if the repetition is unwanted (`hero.eyebrow` in `app/data/home.ts`).
 - **Collaboration-type options in the contact form.** Research, hardware/telemetry, producer/pilot facility, standards, funding, other. Edit in `app/features/contact/schema.ts`.

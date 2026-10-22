@@ -4,6 +4,7 @@ export default [
   layout("layouts/site.tsx", [
     index("routes/home.tsx"),
     route("about", "routes/about.tsx"),
+    route("team", "routes/team.tsx"),
     route("research", "routes/research.tsx"),
     route("research/:slug", "routes/programme.tsx"),
     route("telemetry", "routes/telemetry.tsx"),

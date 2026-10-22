@@ -7,7 +7,7 @@ import { Logo } from "./Logo";
 // Underline grows from the left on hover/focus; gold and full-width on the active route.
 const desktopLink = (isActive: boolean) =>
   [
-    "relative inline-flex items-center py-2 text-[0.84375rem] font-medium transition-colors duration-150",
+    "relative inline-flex items-center whitespace-nowrap py-2 text-[0.84375rem] font-medium transition-colors duration-150",
     "after:absolute after:inset-x-0 after:-bottom-px after:h-px after:origin-left after:transition-transform after:duration-300 after:ease-[var(--ease-research)]",
     isActive
       ? "text-forest after:scale-x-100 after:bg-gold"
@@ -43,11 +43,11 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-rule bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/85">
-      <div className="container-research flex h-20 items-center justify-between gap-6">
-        <Logo height={58} className="-ml-1 shrink-0 rounded-sm" />
+      <div className="container-research flex h-[4.25rem] items-center justify-between gap-6 sm:h-[4.5rem]">
+        <Logo className="-ml-1 shrink-0 rounded-sm" />
 
-        <nav aria-label="Primary" className="hidden md:block">
-          <ul className="flex items-center gap-7 lg:gap-9">
+        <nav aria-label="Primary" className="hidden lg:block">
+          <ul className="flex items-center gap-6 xl:gap-9">
             {primaryNav.map((item) => (
               <li key={item.to}>
                 <NavLink to={item.to} className={({ isActive }) => desktopLink(isActive)}>
@@ -61,7 +61,7 @@ export function Header() {
         <button
           ref={buttonRef}
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-card)] border border-rule text-forest transition-colors duration-150 hover:border-rule-strong active:translate-y-px md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-card)] border border-rule text-forest transition-colors duration-150 hover:border-rule-strong active:translate-y-px lg:hidden"
           aria-expanded={open}
           aria-controls={panelId}
           onClick={() => setOpen((value) => !value)}
@@ -76,7 +76,7 @@ export function Header() {
         id={panelId}
         ref={panelRef}
         inert={!open}
-        className={`grid transition-[grid-template-rows,opacity,visibility] duration-200 ease-[var(--ease-research)] md:hidden ${
+        className={`grid transition-[grid-template-rows,opacity,visibility] duration-200 ease-[var(--ease-research)] lg:hidden ${
           open ? "visible grid-rows-[1fr] opacity-100" : "invisible grid-rows-[0fr] opacity-0"
         }`}
       >

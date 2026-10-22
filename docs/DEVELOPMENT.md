@@ -60,7 +60,7 @@ Content rules from the brief:
 Regenerate assets (Python with Pillow):
 
 ```powershell
-python -I scripts/process-logo.py docs/source/entometrics-africa-logo-v2.jpg   # logo lockup, favicon, social image
+python -I scripts/process-logo.py docs/source/entometrics-africa-logo-v2.jpg docs/source/entometrics-africa-logo-horizontal-v2.jpg   # header and footer logos, favicon, social image
 python -I scripts/process-photos.py
 ```
 

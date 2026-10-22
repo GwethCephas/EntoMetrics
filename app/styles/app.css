@@ -31,6 +31,11 @@
   --color-danger: #9b2c2c;
   --color-focus: #15512d;
 
+  /* Logo lettering, sampled from the client's horizontal logo image. */
+  --color-logo-ink: #0b2e18;
+  --color-logo-gold: #7e6841; /* tagline; 5.3:1 on paper, passes AA */
+  --color-logo-dash: #aa8136;
+
   /* Typography */
   --font-sans: "Inter Variable", Inter, Roboto, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;

@@ -19,5 +19,8 @@ export default defineConfig({
     url: `http://127.0.0.1:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    // Never send real enquiries from tests: build without a Formspree form ID
+    // (process env takes precedence over a local .env file).
+    env: { VITE_FORMSPREE_FORM_ID: "" },
   },
 });

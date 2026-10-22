@@ -29,7 +29,7 @@ const sections: PolicySection[] = [
     heading: "How we use it",
     body: [
       "We use contact-form details only to read and reply to your enquiry. We do not sell or share them for marketing.",
-      "Messages are delivered to our inbox through an email delivery provider. [PLACEHOLDER — CONFIRM WITH CLIENT: name of the email provider and where it processes data]",
+      "Contact-form messages are processed by Formspree (formspree.io), a form-handling service, which forwards them to our inbox. [LEGAL REVIEW: confirm Formspree’s data-processing terms and where it stores submissions]",
     ],
   },
   {

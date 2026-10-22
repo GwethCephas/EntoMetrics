@@ -6,11 +6,15 @@
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
   "upload_source_maps": true,
-  // Non-secret configuration. Leave values empty until confirmed.
-  // Secrets (RESEND_API_KEY, TURNSTILE_SECRET_KEY) are set with `wrangler secret put`.
+  // Custom domains: Cloudflare creates the DNS records and certificates on deploy.
+  // www is redirected to the bare domain in workers/app.ts.
+  "routes": [
+    { "pattern": "entometrics.com", "custom_domain": true },
+    { "pattern": "www.entometrics.com", "custom_domain": true }
+  ],
+  // Non-secret runtime configuration (the dashboard is overwritten on every deploy).
+  // The contact form's Formspree ID is a build-time variable (VITE_FORMSPREE_FORM_ID).
   "vars": {
-    "SITE_URL": "",
-    "CONTACT_TO_EMAIL": "",
-    "CONTACT_FROM_EMAIL": ""
+    "SITE_URL": "https://entometrics.com"
   }
 }

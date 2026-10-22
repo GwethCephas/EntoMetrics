@@ -1,18 +1,5 @@
 # Server-side variables for local `npm run dev` (read by the Cloudflare Vite plugin).
-# Copy to .dev.vars only if you want to test real email delivery locally.
-# In production, set these with `npx wrangler secret put <NAME>` or in the Cloudflare dashboard.
+# Copy to .dev.vars if needed. In production, set them in wrangler.jsonc `vars`.
 
-# Public site origin without trailing slash, e.g. https://entometrics.org (enables canonical URLs)
+# Public site origin without trailing slash, e.g. https://entometrics.com (enables canonical URLs)
 SITE_URL=
-
-# Destination inbox for contact-form messages, e.g. info@entometrics.org (once verified)
-CONTACT_TO_EMAIL=
-
-# Verified sender address on your email provider, e.g. website@entometrics.org
-CONTACT_FROM_EMAIL=
-
-# Resend API key (secret)
-RESEND_API_KEY=
-
-# Cloudflare Turnstile secret key (secret). Leave empty to rely on the honeypot only.
-TURNSTILE_SECRET_KEY=

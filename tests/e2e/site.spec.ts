@@ -228,13 +228,17 @@ test.describe("animated About story", () => {
     const page = await context.newPage();
     await page.goto("/");
     await expect(page.getByRole("button", { name: /Replay animation/ })).toHaveCount(0);
-    const state = await page.evaluate(() => ({
-      bins: [...document.querySelectorAll("[data-bin]")].every((b) => getComputedStyle(b).fillOpacity === "1"),
-      trace: getComputedStyle(document.querySelector("[data-trace]")!).strokeDashoffset,
-      chip: getComputedStyle(document.querySelector("[data-alert-chip]")!).opacity,
-      pillars: [...document.querySelectorAll("[data-pillar]")].map((p) => getComputedStyle(p).opacity),
-    }));
-    expect(state).toEqual({ bins: true, trace: "0px", chip: "1", pillars: ["1", "1", "1"] });
+    // The preference is applied on hydration, so poll rather than sample once.
+    await expect
+      .poll(() =>
+        page.evaluate(() => ({
+          bins: [...document.querySelectorAll("[data-bin]")].every((b) => getComputedStyle(b).fillOpacity === "1"),
+          trace: getComputedStyle(document.querySelector("[data-trace]")!).strokeDashoffset,
+          chip: getComputedStyle(document.querySelector("[data-alert-chip]")!).opacity,
+          pillars: [...document.querySelectorAll("[data-pillar]")].map((p) => getComputedStyle(p).opacity),
+        })),
+      )
+      .toEqual({ bins: true, trace: "0px", chip: "1", pillars: ["1", "1", "1"] });
     await context.close();
   });
 });
@@ -250,5 +254,12 @@ test("sitemap, robots and structured data are served", async ({ page, request })
   const jsonLd = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
   expect(jsonLd.name).toBe("EntoMetrics Africa");
   expect(jsonLd.sameAs).toContain("https://www.linkedin.com/company/entometrics-africa/");
+  expect(jsonLd.sameAs).toContain("https://www.instagram.com/entometrics_africa/");
+
+  await page.goto("/contact");
+  await expect(page.getByRole("link", { name: /entometrics_africa on Instagram/ })).toHaveAttribute(
+    "href",
+    "https://www.instagram.com/entometrics_africa/",
+  );
   expect(jsonLd.email).toBeUndefined();
 });

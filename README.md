@@ -118,30 +118,36 @@ Nothing is required for local development. Never commit real values.
 
 | Name | Where | Secret | Purpose |
 | --- | --- | --- | --- |
-| `SITE_URL` | `wrangler.jsonc` `vars` (production), `.dev.vars` (local) | no | Public origin, e.g. `https://entometrics.org`. Enables canonical URLs, absolute OG image and JSON-LD `url`. |
-| `CONTACT_TO_EMAIL` | `wrangler.jsonc` `vars`, `.dev.vars` | no | Inbox that receives enquiries (once verified) |
-| `CONTACT_FROM_EMAIL` | `wrangler.jsonc` `vars`, `.dev.vars` | no | Verified sender address at the email provider |
-| `RESEND_API_KEY` | `wrangler secret put` / `.dev.vars` | **yes** | Email delivery via the Resend API |
-| `TURNSTILE_SECRET_KEY` | `wrangler secret put` / `.dev.vars` | **yes** | Server-side Cloudflare Turnstile verification (optional) |
-| `VITE_TURNSTILE_SITE_KEY` | `.env` / build environment | no (public) | Shows the Turnstile widget (optional) |
+| `SITE_URL` | `wrangler.jsonc` `vars` (production), `.dev.vars` (local) | no | Public origin, e.g. `https://entometrics.com`. Enables canonical URLs, absolute OG image and JSON-LD `url`. |
+| `VITE_FORMSPREE_FORM_ID` | `.env` (local) / build variable (Workers Builds) | no (public) | Formspree form ID for the contact form. Empty = demonstration mode, nothing is sent. |
 | `VITE_PLAUSIBLE_DOMAIN` | `.env` / build environment | no (public) | Enables Plausible analytics (optional, cookie-free) |
 
-Templates: [.dev.vars.example](.dev.vars.example) (server) and [.env.example](.env.example) (build time). `VITE_*` values are compiled into the browser bundle, so they must never hold secrets.
+Templates: [.dev.vars.example](.dev.vars.example) (server) and [.env.example](.env.example) (build time). `VITE_*` values are compiled into the browser bundle, so they must never hold secrets. A Formspree form ID is public by design (it appears in any HTML form that posts to Formspree).
 
-- **Set non-secret production values in `wrangler.jsonc`, not the dashboard.** Every `wrangler deploy` (including Workers Builds) replaces dashboard-set variables with the values in `wrangler.jsonc`, so a value set only in the dashboard is lost on the next deploy. Secrets set with `wrangler secret put` are not affected.
-- **Turnstile keys go together.** Set `TURNSTILE_SECRET_KEY` and `VITE_TURNSTILE_SITE_KEY` together, or neither. With only the secret set, the widget doesn't render, so every submission fails verification and is rejected.
+- **Set `SITE_URL` in `wrangler.jsonc`, not the dashboard.** Every `wrangler deploy` (including Workers Builds) replaces dashboard-set variables with the values in `wrangler.jsonc`, so a value set only in the dashboard is lost on the next deploy.
+- **`VITE_*` variables are read at build time.** Restart `npm run dev` after editing `.env`. In production, set them as build variables in Workers Builds.
 
-## Contact form behaviour
+## Contact form (Formspree)
 
-- The form validates in the browser and again on the server (`action` in [app/routes/contact.tsx](app/routes/contact.tsx)).
-- A hidden honeypot field rejects simple bots. If `TURNSTILE_SECRET_KEY` is set, Turnstile is verified on the server.
-- **Without `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL`, nothing is sent.**
-  - The page shows a "Demonstration mode" notice.
-  - A valid submission returns *"Validated, not sent"*.
-- "Message sent" appears only after the email provider accepts the message.
-- Provider errors are logged without credentials. Users see a generic message.
+Messages are delivered by [Formspree](https://formspree.io). The recipient address is set in the Formspree dashboard, not in this code. Enquiries are to go to **cfreeka18@gmail.com**.
 
-Another provider (Cloudflare Email Service, Postmark and others) can be swapped in by changing `handleContactSubmission` in [app/features/contact/submit.server.ts](app/features/contact/submit.server.ts).
+**How it works**
+- React Hook Form validates the fields in the browser with the shared Zod schema ([app/features/contact/schema.ts](app/features/contact/schema.ts)) and shows errors inline.
+- [app/features/contact/formspree.ts](app/features/contact/formspree.ts) posts the validated message as JSON to `https://formspree.io/f/<form ID>`, with `_replyto` (so replies go to the sender) and a `_subject`.
+- Formspree validates again on its side and filters spam. Its field errors are mapped back onto the form fields.
+- A hidden honeypot field silently rejects simple bots before anything is sent.
+- "Message sent" appears only after Formspree accepts the submission. Network or Formspree errors show "Not delivered" and keep the user's text.
+- **Without `VITE_FORMSPREE_FORM_ID`, nothing is sent.** The page shows "Demonstration mode", and a valid submission returns *"Validated, not sent"*.
+
+**One-time setup**
+1. Sign up or log in at [formspree.io](https://formspree.io) with **cfreeka18@gmail.com**, and verify that address when Formspree emails you. Alternatively, use another account and add cfreeka18@gmail.com as a verified linked email.
+2. Create a new form (for example "EntoMetrics Africa website"). Set its target email to cfreeka18@gmail.com.
+3. Copy the form ID: the last part of the endpoint `https://formspree.io/f/<form ID>`.
+4. In the form's settings, **turn reCAPTCHA off.** This site submits with JavaScript, and Formspree's reCAPTCHA only works with plain HTML posts or a custom reCAPTCHA key. Spam protection comes from the honeypot plus Formspree's built-in spam filtering.
+5. Locally, create `.env` in the project root with `VITE_FORMSPREE_FORM_ID=<form ID>`, then restart `npm run dev`. In production, add the same variable as a build variable in Workers Builds.
+6. Send a test enquiry from http://localhost:5173/contact. Formspree may ask you to confirm the first submission by email; after that, messages arrive in the inbox.
+
+Automated tests never send real enquiries: the Playwright build forces `VITE_FORMSPREE_FORM_ID` to empty, and unit tests mock the network.
 
 ## Deploying to Cloudflare (later)
 
@@ -156,33 +162,27 @@ Nothing has been deployed yet. When you're ready:
    - The build writes `build/server/wrangler.json`, which `wrangler deploy` picks up automatically. It includes the static assets directory.
    - Alternatively, deploy from your machine with `npx wrangler login`, then `npm run deploy`.
 3. **Preview deployments.** Workers Builds creates a preview URL for each non-production branch or pull request. From the command line, `npm run deploy:preview` uploads a version without promoting it.
-4. **Configure secrets.** Settings → Variables and Secrets, or:
-   ```powershell
-   npx wrangler secret put RESEND_API_KEY
-   npx wrangler secret put TURNSTILE_SECRET_KEY   # optional
-   ```
-   Set `SITE_URL`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in `wrangler.jsonc` `vars` and commit them. Don't set them in the dashboard: the next deploy would overwrite them. Set `VITE_TURNSTILE_SITE_KEY` and `VITE_PLAUSIBLE_DOMAIN` as build variables in Workers Builds, because they are compiled in at build time.
-5. **Connect the custom domain.** Once the domain is registered and on Cloudflare DNS: Worker → Settings → Domains & Routes → Add custom domain (e.g. `entometrics.org` and `www.entometrics.org`). Then set `SITE_URL` to match.
+4. **Configure variables.** Set `SITE_URL` in `wrangler.jsonc` `vars` and commit it. Don't set it in the dashboard, because the next deploy would overwrite it. Set `VITE_FORMSPREE_FORM_ID` (and optionally `VITE_PLAUSIBLE_DOMAIN`) as **build variables** in Workers Builds, because they are compiled in at build time. No secrets are needed.
+5. **Connect the custom domain.** Once the domain is registered and on Cloudflare DNS: Worker → Settings → Domains & Routes → Add custom domain (e.g. `entometrics.com` and `www.entometrics.com`). Then set `SITE_URL` to match.
 6. **Set up email.**
-   - Verify the sending domain with your provider (SPF, DKIM and DMARC DNS records).
-   - Create the API key and store it as a secret.
-   - Confirm that `info@entometrics.org` receives mail, for example via Cloudflare Email Routing or a mailbox provider.
-7. **Rate-limit the form.** Optionally, add a Cloudflare WAF rate-limiting rule for `POST /contact`, for example 5 requests per minute per IP.
+   - Contact-form delivery is handled by Formspree (see "Contact form" above). After a custom domain is connected, add it to the form's allowed domains in Formspree if you restrict submissions by domain.
+   - Separately, confirm that `info@entometrics.com` (the address shown on the site) receives mail, for example via Cloudflare Email Routing or a mailbox provider.
+7. **Spam limits.** Formspree applies its own spam filtering and plan limits. Check the form's submission quota for your Formspree plan.
 8. **Run production smoke tests.**
    - Every page loads, including direct loads of `/research/substrate-telemetry`.
    - `/does-not-exist` returns 404.
    - `/sitemap.xml` and `/robots.txt` show the real domain.
    - Page source contains the canonical tag.
-   - Send a real test enquiry and confirm it arrives. Then confirm a honeypot submission is rejected.
+   - Send a real test enquiry and confirm it arrives at cfreeka18@gmail.com.
    - Run Lighthouse on the live URL.
    - Check the JSON-LD with Google's Rich Results Test.
 
 ## Launch checklist
 
-- [ ] **Domain:** `entometrics.org` registered, connected, `SITE_URL` set.
-- [ ] **Email:** `info@entometrics.org` working; provider domain verified; `site.emailVerified` set to `true` in `app/data/site.ts`; real test enquiry received.
+- [ ] **Domain:** `entometrics.com` registered, connected, `SITE_URL` set.
+- [ ] **Email:** Formspree form created for cfreeka18@gmail.com, reCAPTCHA off, `VITE_FORMSPREE_FORM_ID` set as a build variable, real test enquiry received. `info@entometrics.com` working and `site.emailVerified` set to `true` in `app/data/site.ts`.
 - [ ] **Legal:** registered legal form and number confirmed and added to `site.ts`. If not yet registered, change "non-profit research institution" to "independent research initiative" (`positioning.statement` in `app/data/about.ts`). Privacy Policy and Data and Ethics Statement reviewed and the "Draft" notices removed.
 - [ ] **Science:** programme statuses and timeline stages confirmed; the Kenyan code-of-practice wording confirmed with KEBS; heat-mortality mechanism wording approved by the scientific advisor; threshold values remain provisional.
 - [ ] **Content:** all `[PLACEHOLDER …]`, `[PHOTO …]` and `[LINKEDIN …]` markers resolved (see HANDOVER.md).
-- [ ] **Forms:** production submission tested end to end, Turnstile and/or rate limiting enabled.
+- [ ] **Forms:** production submission tested end to end through Formspree.
 - [ ] **Quality:** `npm run check` and `npm run test:e2e` pass; Lighthouse run on the live site.

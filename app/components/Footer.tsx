@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { legalNav, primaryNav } from "~/data/nav";
 import { programmes } from "~/data/programmes";
 import { site } from "~/data/site";
-import { LinkedInIcon } from "./icons";
+import { InstagramIcon, LinkedInIcon } from "./icons";
 import { Logo } from "./Logo";
 import { RichText } from "./RichText";
 
@@ -60,6 +60,13 @@ export function Footer() {
               <a href={site.linkedin} className={`${footerLink} inline-flex items-center gap-2`} rel="noopener noreferrer" target="_blank">
                 <LinkedInIcon width={14} height={14} className="text-forest" />
                 LinkedIn
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+            <li>
+              <a href={site.instagram} className={`${footerLink} inline-flex items-center gap-2`} rel="noopener noreferrer" target="_blank">
+                <InstagramIcon width={14} height={14} className="text-forest" />
+                Instagram
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </li>

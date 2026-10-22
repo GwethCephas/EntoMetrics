@@ -1,11 +1,10 @@
 import { Mail, MapPin } from "lucide-react";
-import { LinkedInIcon } from "~/components/icons";
+import { InstagramIcon, LinkedInIcon } from "~/components/icons";
 import { PageHeader } from "~/components/PageHeader";
 import { collaboration } from "~/data/home";
 import { site } from "~/data/site";
 import { ContactForm } from "~/features/contact/ContactForm";
-import { handleContactSubmission, isEmailConfigured } from "~/features/contact/submit.server";
-import { cloudflareContext } from "~/lib/cloudflare";
+import { normaliseFormId } from "~/features/contact/formspree";
 import { pageMeta } from "~/lib/meta";
 import type { Route } from "./+types/contact";
 
@@ -16,21 +15,10 @@ export const meta: Route.MetaFunction = () =>
       "Collaboration enquiries for EntoMetrics Africa from entomologists, invertebrate welfare scientists, hardware engineers and agricultural research groups.",
   });
 
-export function loader({ context }: Route.LoaderArgs) {
-  const { env } = context.get(cloudflareContext);
-  return { emailConfigured: isEmailConfigured(env) };
-}
+// Public Formspree form ID, compiled in at build time (see README, "Contact form").
+const FORMSPREE_FORM_ID = normaliseFormId(import.meta.env.VITE_FORMSPREE_FORM_ID as string | undefined);
 
-export async function action({ request, context }: Route.ActionArgs) {
-  const { env } = context.get(cloudflareContext);
-  const formData = await request.formData();
-  return handleContactSubmission(formData, {
-    env,
-    remoteIp: request.headers.get("CF-Connecting-IP"),
-  });
-}
-
-export default function Contact({ loaderData }: Route.ComponentProps) {
+export default function Contact() {
   return (
     <>
       <PageHeader eyebrow="Contact" title="Collaboration enquiries" intro={<p>{collaboration.text}</p>} />
@@ -39,7 +27,7 @@ export default function Contact({ loaderData }: Route.ComponentProps) {
         <div className="container-research grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <h2 className="mb-8 text-[clamp(1.375rem,1.2rem+0.7vw,1.625rem)]">Send an enquiry</h2>
-            <ContactForm emailConfigured={loaderData.emailConfigured} />
+            <ContactForm formId={FORMSPREE_FORM_ID} />
           </div>
 
           <aside aria-labelledby="details-heading" className="lg:col-span-4 lg:col-start-9">
@@ -77,6 +65,17 @@ export default function Contact({ loaderData }: Route.ComponentProps) {
                     <a className="text-link" href={site.linkedin} target="_blank" rel="noopener noreferrer">
                       EntoMetrics Africa on LinkedIn
                       <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="label flex items-center gap-2">
+                    <InstagramIcon width={13} height={13} /> Instagram
+                  </dt>
+                  <dd className="mt-1">
+                    <a className="text-link" href={site.instagram} target="_blank" rel="noopener noreferrer">
+                      @entometrics_africa
+                      <span className="sr-only"> on Instagram (opens in a new tab)</span>
                     </a>
                   </dd>
                 </div>

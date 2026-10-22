@@ -7,9 +7,10 @@ export const site = {
   tagline: "Insect welfare science and micro-climate telemetry",
   location: "Nairobi, Kenya",
   /** Proposed address from the brief. Ownership and delivery not yet confirmed. */
-  email: "info@entometrics.org",
+  email: "info@entometrics.com",
   emailVerified: false,
   linkedin: "https://www.linkedin.com/company/entometrics-africa/",
+  instagram: "https://www.instagram.com/entometrics_africa/",
   legalStatus: {
     organisationType: "[PLACEHOLDER — CONFIRM WITH CLIENT: registered legal form]",
     registrationNumber: "[PLACEHOLDER — CONFIRM WITH CLIENT: registration number]",

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
+import { buildPayload, normaliseFormId, submitContact } from "~/features/contact/formspree";
 import { contactSchema } from "~/features/contact/schema";
-import { handleContactSubmission } from "~/features/contact/submit.server";
 
 const valid = {
   name: "Ada Researcher",
@@ -9,12 +9,6 @@ const valid = {
   collaborationType: "Scientific research collaboration",
   message: "We would like to discuss a collaboration on welfare indicators.",
 };
-
-function formData(values: Record<string, string>) {
-  const fd = new FormData();
-  for (const [k, v] of Object.entries(values)) fd.append(k, v);
-  return fd;
-}
 
 describe("contactSchema", () => {
   it("accepts a valid message and trims input", () => {
@@ -35,55 +29,68 @@ describe("contactSchema", () => {
   });
 });
 
-describe("handleContactSubmission", () => {
-  it("never reports 'sent' when email is not configured", async () => {
+describe("normaliseFormId", () => {
+  it("accepts alphanumeric IDs and rejects anything else", () => {
+    expect(normaliseFormId(" xyzabcde ")).toBe("xyzabcde");
+    expect(normaliseFormId("")).toBeNull();
+    expect(normaliseFormId(undefined)).toBeNull();
+    expect(normaliseFormId("../evil")).toBeNull();
+  });
+});
+
+describe("submitContact (Formspree)", () => {
+  it("never reports 'sent' when no form ID is configured", async () => {
     const fetchSpy = vi.fn();
-    const result = await handleContactSubmission(formData(valid), { env: {}, fetch: fetchSpy });
+    const result = await submitContact(valid, { formId: null, fetch: fetchSpy });
     expect(result).toEqual({ status: "not-sent", reason: "not-configured" });
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it("returns field errors for invalid input", async () => {
-    const result = await handleContactSubmission(formData({ ...valid, email: "bad" }), { env: {} });
+  it("returns field errors for invalid input without calling Formspree", async () => {
+    const fetchSpy = vi.fn();
+    const result = await submitContact({ ...valid, email: "bad" }, { formId: "abc123", fetch: fetchSpy });
     expect(result.status).toBe("invalid");
     if (result.status === "invalid") expect(result.fieldErrors.email).toBeTruthy();
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it("rejects honeypot submissions without calling the provider", async () => {
+  it("rejects honeypot submissions without calling Formspree", async () => {
     const fetchSpy = vi.fn();
-    const env = { RESEND_API_KEY: "k", CONTACT_TO_EMAIL: "to@x.org", CONTACT_FROM_EMAIL: "from@x.org" };
-    const result = await handleContactSubmission(formData({ ...valid, website: "spam.example" }), { env, fetch: fetchSpy });
+    const result = await submitContact(valid, { formId: "abc123", honeypot: "spam.example", fetch: fetchSpy });
     expect(result).toEqual({ status: "rejected" });
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it("reports 'sent' only after the provider accepts the message", async () => {
-    const env = { RESEND_API_KEY: "secret", CONTACT_TO_EMAIL: "to@x.org", CONTACT_FROM_EMAIL: "from@x.org" };
-    const fetchSpy = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }));
-    const result = await handleContactSubmission(formData(valid), { env, fetch: fetchSpy });
+  it("posts JSON to the form endpoint and reports 'sent' only when Formspree accepts it", async () => {
+    const fetchSpy = vi.fn().mockResolvedValue(Response.json({ ok: true }));
+    const result = await submitContact(valid, { formId: "abc123", fetch: fetchSpy });
     expect(result).toEqual({ status: "sent" });
     const [url, init] = fetchSpy.mock.calls[0]!;
-    expect(url).toBe("https://api.resend.com/emails");
+    expect(url).toBe("https://formspree.io/f/abc123");
+    expect(init.method).toBe("POST");
+    expect(init.headers).toMatchObject({ Accept: "application/json" });
     const body = JSON.parse(init.body as string);
-    expect(body.to).toEqual(["to@x.org"]);
-    expect(body.reply_to).toBe(valid.email);
+    expect(body).toMatchObject({ email: valid.email, _replyto: valid.email, message: valid.message });
   });
 
-  it("reports an error when the provider fails", async () => {
-    const env = { RESEND_API_KEY: "secret", CONTACT_TO_EMAIL: "to@x.org", CONTACT_FROM_EMAIL: "from@x.org" };
-    const fetchSpy = vi.fn().mockResolvedValue(new Response("nope", { status: 500 }));
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    const result = await handleContactSubmission(formData(valid), { env, fetch: fetchSpy });
-    expect(result).toEqual({ status: "error" });
+  it("maps Formspree field errors back onto form fields", async () => {
+    const fetchSpy = vi
+      .fn()
+      .mockResolvedValue(Response.json({ errors: [{ field: "email", message: "should be an email", code: "TYPE_EMAIL" }] }, { status: 422 }));
+    const result = await submitContact(valid, { formId: "abc123", fetch: fetchSpy });
+    expect(result).toEqual({ status: "invalid", fieldErrors: { email: "should be an email" } });
   });
 
-  it("rejects when Turnstile is enabled and verification fails", async () => {
-    const env = { TURNSTILE_SECRET_KEY: "ts" };
-    const fetchSpy = vi.fn().mockResolvedValue(Response.json({ success: false }));
-    const result = await handleContactSubmission(formData({ ...valid, "cf-turnstile-response": "tok" }), {
-      env,
-      fetch: fetchSpy,
-    });
-    expect(result).toEqual({ status: "rejected" });
+  it("reports an error for form-level failures and network errors", async () => {
+    const formLevel = vi.fn().mockResolvedValue(Response.json({ errors: [{ message: "Form not found" }] }, { status: 404 }));
+    expect(await submitContact(valid, { formId: "abc123", fetch: formLevel })).toEqual({ status: "error" });
+    const offline = vi.fn().mockRejectedValue(new TypeError("Failed to fetch"));
+    expect(await submitContact(valid, { formId: "abc123", fetch: offline })).toEqual({ status: "error" });
+  });
+
+  it("builds a single-line subject", () => {
+    const payload = buildPayload({ ...valid, name: "Ada\nInjected", organisation: "" } as never);
+    expect(payload._subject).not.toMatch(/\n/);
+    expect(payload.organisation).toBe("(not given)");
   });
 });

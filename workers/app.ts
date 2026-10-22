@@ -19,6 +19,13 @@ const securityHeaders: Record<string, string> = {
 
 export default {
   async fetch(request: Request, env: ServerEnv, ctx: WorkerExecutionContext) {
+    // One canonical host: send www.entometrics.com to the bare domain.
+    const url = new URL(request.url);
+    if (url.hostname.startsWith("www.")) {
+      url.hostname = url.hostname.slice(4);
+      return Response.redirect(url.toString(), 301);
+    }
+
     const context = new RouterContextProvider();
     context.set(cloudflareContext, { env, waitUntil: (p) => ctx.waitUntil(p) });
     const response = await requestHandler(request, context);

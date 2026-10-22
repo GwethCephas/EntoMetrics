@@ -7,10 +7,6 @@ import { createContext } from "react-router";
  */
 export interface ServerEnv {
   SITE_URL?: string;
-  CONTACT_TO_EMAIL?: string;
-  CONTACT_FROM_EMAIL?: string;
-  RESEND_API_KEY?: string;
-  TURNSTILE_SECRET_KEY?: string;
 }
 
 export interface CloudflareContext {

@@ -1,35 +1,32 @@
-import { useEffect, useId, useRef, type ReactNode, type Ref } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode, type Ref } from "react";
 import { useForm, type UseFormRegisterReturn } from "react-hook-form";
-import { Link, useFetcher } from "react-router";
+import { Link } from "react-router";
 import { buttonClassName } from "~/components/ui";
 import { site } from "~/data/site";
+import { submitContact, type ContactResult } from "./formspree";
 import { COLLABORATION_TYPES, contactSchema, HONEYPOT_FIELD, type ContactField, type ContactInput } from "./schema";
-import type { ContactResult } from "./submit.server";
 import { zodResolver } from "./zodResolver";
 
 interface ContactFormProps {
-  emailConfigured: boolean;
+  /** Formspree form ID, or null when delivery is not configured (demonstration mode). */
+  formId: string | null;
 }
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
-
-export function ContactForm({ emailConfigured }: ContactFormProps) {
-  const fetcher = useFetcher<ContactResult>();
+export function ContactForm({ formId }: ContactFormProps) {
+  const emailConfigured = formId !== null;
+  const [result, setResult] = useState<ContactResult>();
   const statusRef = useRef<HTMLDivElement>(null);
   const {
     register,
     handleSubmit,
     setError,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", organisation: "", email: "", message: "", collaborationType: undefined },
     mode: "onTouched",
   });
-
-  const submitting = fetcher.state !== "idle";
-  const result = fetcher.state === "idle" ? fetcher.data : undefined;
 
   useEffect(() => {
     if (!result) return;
@@ -37,16 +34,17 @@ export function ContactForm({ emailConfigured }: ContactFormProps) {
       for (const [field, message] of Object.entries(result.fieldErrors)) {
         setError(field as ContactField, { type: "server", message });
       }
-      return;
     }
-    if (result.status === "sent") reset();
     statusRef.current?.focus();
-  }, [result, setError, reset]);
+  }, [result, setError]);
 
-  const onSubmit = handleSubmit((_values, event) => {
+  const onSubmit = handleSubmit(async (values, event) => {
     const form = event?.target as HTMLFormElement | undefined;
-    if (!form) return;
-    fetcher.submit(new FormData(form), { method: "post" });
+    const honeypot = form ? String(new FormData(form).get(HONEYPOT_FIELD) ?? "") : "";
+    setResult(undefined);
+    const outcome = await submitContact(values, { formId, honeypot });
+    if (outcome.status === "sent") reset();
+    setResult(outcome);
   });
 
   return (
@@ -55,7 +53,7 @@ export function ContactForm({ emailConfigured }: ContactFormProps) {
         <div role="note" className="mb-8 rounded-[var(--radius-card)] border border-gold bg-gold/10 p-4 text-[0.9375rem]">
           <p className="font-mono text-label uppercase text-ink">Demonstration mode</p>
           <p className="mt-1 text-ink">
-            Email delivery is not configured in this environment. The form checks your entries but{" "}
+            The contact form is not connected in this environment. It checks your entries but{" "}
             <strong>does not send them</strong>. To reach us now, email{" "}
             <a className="text-link" href={`mailto:${site.email}`}>
               {site.email}
@@ -67,7 +65,7 @@ export function ContactForm({ emailConfigured }: ContactFormProps) {
 
       <ResultMessage result={result} ref={statusRef} />
 
-      <form method="post" noValidate onSubmit={onSubmit} aria-busy={submitting} className="grid gap-6">
+      <form noValidate onSubmit={onSubmit} aria-busy={isSubmitting} className="grid gap-6">
         <div className="grid gap-6 sm:grid-cols-2">
           <Field label="Name" error={errors.name?.message} required registration={register("name")} autoComplete="name" />
           <Field
@@ -99,16 +97,9 @@ export function ContactForm({ emailConfigured }: ContactFormProps) {
           </label>
         </div>
 
-        {TURNSTILE_SITE_KEY ? (
-          <>
-            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-            <div className="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light" />
-          </>
-        ) : null}
-
         <div className="flex flex-wrap items-center gap-4">
-          <button type="submit" className={buttonClassName("primary")} disabled={submitting}>
-            {submitting ? "Submitting…" : emailConfigured ? "Send enquiry" : "Check and submit (demo)"}
+          <button type="submit" className={buttonClassName("primary")} disabled={isSubmitting}>
+            {isSubmitting ? "Sending…" : emailConfigured ? "Send enquiry" : "Check and submit (demo)"}
           </button>
           <p className="text-[0.875rem] text-ink-70">
             We use these details only to reply to your enquiry. See our{" "}
@@ -132,11 +123,11 @@ function ResultMessage({ result, ref }: { result: ContactResult | undefined; ref
     case "sent":
       tone = "success";
       title = "Message sent";
-      body = "Thank you. Your enquiry has been delivered and we will reply by email.";
+      body = "Thank you. Your enquiry has been sent and we will reply by email.";
       break;
     case "not-sent":
       title = "Validated, not sent";
-      body = `Your message passed validation but was not sent: email delivery is not configured in this environment. Please email ${site.email} directly.`;
+      body = `Your message passed validation but was not sent: the contact form is not connected in this environment. Please email ${site.email} directly.`;
       break;
     case "rejected":
       tone = "error";

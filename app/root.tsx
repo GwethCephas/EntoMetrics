@@ -35,7 +35,7 @@ function organisationJsonLd(siteUrl: string | null) {
     "@type": "ResearchOrganization",
     name: site.name,
     address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
-    sameAs: [site.linkedin],
+    sameAs: [site.linkedin, site.instagram],
   };
   // Domain and email are unconfirmed (brief §9): only publish once configured/verified.
   if (siteUrl) {

@@ -12,9 +12,11 @@
     { "pattern": "entometrics.com", "custom_domain": true },
     { "pattern": "www.entometrics.com", "custom_domain": true }
   ],
-  // Non-secret runtime configuration (the dashboard is overwritten on every deploy).
-  // The contact form's Formspree ID is a build-time variable (VITE_FORMSPREE_FORM_ID).
+  // Non-secret configuration; this file is the source of truth (the dashboard is
+  // overwritten on every deploy). VITE_FORMSPREE_FORM_ID is also read at build time
+  // by vite.config.ts, so the contact form needs no separate build variable.
   "vars": {
-    "SITE_URL": "https://entometrics.com"
+    "SITE_URL": "https://entometrics.com",
+    "VITE_FORMSPREE_FORM_ID": "mqpergba"
   }
 }

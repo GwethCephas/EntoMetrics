@@ -15,7 +15,7 @@ export const meta: Route.MetaFunction = () =>
       "Collaboration enquiries for EntoMetrics Africa from entomologists, invertebrate welfare scientists, hardware engineers and agricultural research groups.",
   });
 
-// Public Formspree form ID, compiled in at build time (see README, "Contact form").
+// Public Formspree form ID, compiled in at build time from wrangler.jsonc (see docs/DEVELOPMENT.md).
 const FORMSPREE_FORM_ID = normaliseFormId(import.meta.env.VITE_FORMSPREE_FORM_ID as string | undefined);
 
 export default function Contact() {

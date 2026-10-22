@@ -30,7 +30,7 @@ describe("content accuracy rules", () => {
   });
 
   it("has five team members with clean, client-supplied LinkedIn profiles", () => {
-    expect(team.map((m) => m.name)).toEqual(["Clinton Adoga", "Paul Murani", "Mary Wairimu", "Cephas Gweth", "Fernán Gizzi"]);
+    expect(team.map((m) => m.name)).toEqual(["Clinton Adoga", "Paul Murani", "Mary Wairimu", "Fernán Gizzi", "Cephas Gweth"]);
     for (const m of team) {
       expect(m.linkedin).toMatch(/^https:\/\/www\.linkedin\.com\/in\/[a-z0-9-]+$/);
       expect(m.responsibilities.length).toBeGreaterThan(40);

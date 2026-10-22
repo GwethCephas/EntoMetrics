@@ -54,14 +54,6 @@ export const team: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/mary-wairimu-3b34543b0",
   },
   {
-    name: "Cephas Gweth",
-    role: "Data Platform Engineer",
-    responsibilities:
-      "Builds the software layer that turns raw sensor readings into usable data: data pipelines, dashboards, alerts, and the web and mobile tools facility operators use.",
-    photo: null, // photo to be supplied
-    linkedin: "https://www.linkedin.com/in/cephas-gweth",
-  },
-  {
     name: "Fernán Gizzi",
     role: "Independent Scientific and Data Advisor",
     responsibilities:
@@ -69,6 +61,15 @@ export const team: TeamMember[] = [
     bio: "PhD candidate in Biological Sciences (IBR, CONICET-UNR) and co-founder of Agrosintex. Advises independently; protocols are pre-specified and scoring is blinded.",
     photo: { webp: fernanWebp, jpg: fernanJpg },
     linkedin: "https://www.linkedin.com/in/fernan-oscar-gizzi",
+  },
+  {
+    name: "Cephas Gweth",
+    role: "Data Platform Engineer",
+    responsibilities:
+      "Builds the software layer that turns raw sensor readings into usable data: data pipelines, dashboards, alerts, and the web and mobile tools facility operators use.",
+    bio: "Software developer with 3 years of experience building Android applications using Kotlin and Jetpack Compose, with a focus on clean architecture, API integration, database management, and reliable user experiences.",
+    photo: null, // photo to be supplied
+    linkedin: "https://www.linkedin.com/in/cephas-gweth",
   },
 ];
 

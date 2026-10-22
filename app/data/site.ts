@@ -6,9 +6,10 @@ export const site = {
   name: "EntoMetrics Africa",
   tagline: "Insect welfare science and micro-climate telemetry",
   location: "Nairobi, Kenya",
-  /** Proposed address from the brief. Ownership and delivery not yet confirmed. */
+  /** Public contact address on the organisation's domain (entometrics.com). */
   email: "info@entometrics.com",
-  emailVerified: false,
+  /** Confirmed by the client: hides the "not yet confirmed" note and lists the email in JSON-LD. */
+  emailVerified: true,
   linkedin: "https://www.linkedin.com/company/entometrics-africa/",
   instagram: "https://www.instagram.com/entometrics_africa/",
   legalStatus: {

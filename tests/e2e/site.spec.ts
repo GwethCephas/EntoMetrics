@@ -261,5 +261,5 @@ test("sitemap, robots and structured data are served", async ({ page, request })
     "href",
     "https://www.instagram.com/entometrics_africa/",
   );
-  expect(jsonLd.email).toBeUndefined();
+  expect(jsonLd.email).toBe("info@entometrics.com");
 });

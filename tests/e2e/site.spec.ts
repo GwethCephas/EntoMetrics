@@ -141,7 +141,7 @@ test("home page sections appear in the brief's order", async ({ page }) => {
 test("About page shows the team with LinkedIn profiles", async ({ page }) => {
   await page.goto("/about#team");
   await expect(page.locator("#team-heading")).toBeVisible();
-  await expect(page.locator("#team a[href^='https://www.linkedin.com/in/']")).toHaveCount(4);
+  await expect(page.locator("#team a[href^='https://www.linkedin.com/in/']")).toHaveCount(5);
 });
 
 test("no bracketed placeholder text appears on any page", async ({ page }) => {

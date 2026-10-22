@@ -13,10 +13,12 @@ function TeamMemberEntry({ member }: { member: TeamMember }) {
           {member.role}
         </p>
         <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink">{member.responsibilities}</p>
-        <p className="mt-3 text-[0.875rem] leading-relaxed text-ink-70">
-          <span className="font-mono text-[0.6875rem] uppercase tracking-[0.06em]">Background · </span>
-          {member.bio}
-        </p>
+        {member.bio ? (
+          <p className="mt-3 text-[0.875rem] leading-relaxed text-ink-70">
+            <span className="font-mono text-[0.6875rem] uppercase tracking-[0.06em]">Background · </span>
+            {member.bio}
+          </p>
+        ) : null}
         <div className="mt-2">
           {member.linkedin ? (
             <a
@@ -42,7 +44,7 @@ export function TeamGrid() {
     <section id="team" aria-labelledby="team-heading" className="section">
       <div className="container-research">
         <SectionHeader index="People" title="Team" id="team-heading" />
-        <ul className="mt-10 grid gap-6 lg:grid-cols-4 lg:gap-8">
+        <ul className="mt-10 grid gap-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
           {team.map((member) => (
             <TeamMemberEntry key={member.name} member={member} />
           ))}

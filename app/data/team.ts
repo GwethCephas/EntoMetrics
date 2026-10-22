@@ -17,8 +17,8 @@ export interface TeamMember {
   role: string;
   /** What the person does at EntoMetrics Africa (supplied by the client). */
   responsibilities: string;
-  /** Background and credentials (from the brief). */
-  bio: string;
+  /** Background and credentials, if supplied. */
+  bio?: string;
   /** null until the client supplies an approved photo. */
   photo: TeamPhoto | null;
   /** Personal LinkedIn profile, or null if not supplied. */
@@ -52,6 +52,14 @@ export const team: TeamMember[] = [
     bio: "Epidemiology graduate (Masinde Muliro University of Science and Technology) experienced in health-data collection, monitoring and reporting.",
     photo: { webp: maryWebp, jpg: maryJpg },
     linkedin: "https://www.linkedin.com/in/mary-wairimu-3b34543b0",
+  },
+  {
+    name: "Cephas Gweth",
+    role: "Data Platform Engineer",
+    responsibilities:
+      "Builds the software layer that turns raw sensor readings into usable data: data pipelines, dashboards, alerts, and the web and mobile tools facility operators use.",
+    photo: null, // photo to be supplied
+    linkedin: "https://www.linkedin.com/in/cephas-gweth",
   },
   {
     name: "Fernán Gizzi",

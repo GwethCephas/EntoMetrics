@@ -25,6 +25,8 @@ export default defineConfig(({ mode }) => {
     resolve: { tsconfigPaths: true },
     define: {
       "import.meta.env.VITE_FORMSPREE_FORM_ID": JSON.stringify(formspreeFormId),
+      // Sitemap <lastmod>: the day this build was made.
+      "import.meta.env.VITE_BUILD_DATE": JSON.stringify(new Date().toISOString().slice(0, 10)),
     },
     plugins: [cloudflare({ viteEnvironment: { name: "ssr" } }), tailwindcss(), reactRouter()],
   };

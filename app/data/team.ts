@@ -15,10 +15,13 @@ export interface TeamPhoto {
 export interface TeamMember {
   name: string;
   role: string;
+  /** What the person does at EntoMetrics Africa (supplied by the client). */
+  responsibilities: string;
+  /** Background and credentials (from the brief). */
   bio: string;
   /** null until the client supplies an approved photo. */
   photo: TeamPhoto | null;
-  /** null until the client supplies the person's own LinkedIn URL. */
+  /** Personal LinkedIn profile, or null if not supplied. */
   linkedin: string | null;
 }
 
@@ -26,30 +29,38 @@ export const team: TeamMember[] = [
   {
     name: "Clinton Adoga",
     role: "Executive Director and Lead Founder",
+    responsibilities:
+      "Leads overall strategy, funder and partner relationships, and programme coordination across EntoMetrics Africa’s research pillars.",
     bio: "Founder and programme builder who has led national innovation programmes in Kenya and co-founded AgriGlow, acquired by KALRO.",
     photo: { webp: clintonWebp, jpg: clintonJpg },
-    linkedin: null,
+    linkedin: "https://www.linkedin.com/in/clinton-adoga-92627a265",
   },
   {
     name: "Paul Murani",
     role: "IoT and Systems Engineer",
+    responsibilities:
+      "Handles hardware assembly, sensor deployment, probe calibration, and the 2G SMS gateway firmware that gets telemetry data out of off-grid facilities.",
     bio: "Systems and data engineer with 5+ years building field-telemetry and remote-endpoint data systems; BEng, Electrical and Electronics Engineering, University of Nairobi.",
     photo: { webp: paulWebp, jpg: paulJpg },
-    linkedin: null,
+    linkedin: "https://www.linkedin.com/in/paul-murani",
   },
   {
     name: "Mary Wairimu",
     role: "Operations and Field Data Lead",
+    responsibilities:
+      "Runs facility audits and day-to-day field data collection in Kenya, manages farmer communications, and validates data pipelines before they’re passed on for analysis.",
     bio: "Epidemiology graduate (Masinde Muliro University of Science and Technology) experienced in health-data collection, monitoring and reporting.",
     photo: { webp: maryWebp, jpg: maryJpg },
-    linkedin: null,
+    linkedin: "https://www.linkedin.com/in/mary-wairimu-3b34543b0",
   },
   {
     name: "Fernán Gizzi",
     role: "Independent Scientific and Data Advisor",
+    responsibilities:
+      "Advises on research design and data analysis for the welfare science underpinning the telemetry work.",
     bio: "PhD candidate in Biological Sciences (IBR, CONICET-UNR) and co-founder of Agrosintex. Advises independently; protocols are pre-specified and scoring is blinded.",
     photo: { webp: fernanWebp, jpg: fernanJpg },
-    linkedin: null,
+    linkedin: "https://www.linkedin.com/in/fernan-oscar-gizzi",
   },
 ];
 

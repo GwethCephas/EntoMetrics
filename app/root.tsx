@@ -21,7 +21,8 @@ const PLAUSIBLE_DOMAIN = import.meta.env.VITE_PLAUSIBLE_DOMAIN as string | undef
 export const links: Route.LinksFunction = () => [
   { rel: "preload", href: interLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
   { rel: "stylesheet", href: stylesheet },
-  { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+  { rel: "icon", href: "/favicon.png", type: "image/png" },
+  { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
 ];
 
 export function loader({ context }: Route.LoaderArgs) {
@@ -29,21 +30,38 @@ export function loader({ context }: Route.LoaderArgs) {
   return { siteUrl: normaliseSiteUrl(env.SITE_URL) };
 }
 
-function organisationJsonLd(siteUrl: string | null) {
-  const data: Record<string, unknown> = {
-    "@context": "https://schema.org",
+/**
+ * Structured data for search engines: the organisation (knowledge panel,
+ * logo, social profiles) and the website (site name shown in results).
+ */
+function structuredData(siteUrl: string | null) {
+  const organisation: Record<string, unknown> = {
     "@type": "ResearchOrganization",
     name: site.name,
+    alternateName: "EntoMetrics",
+    description:
+      "Independent research organisation in Nairobi, Kenya, working on Black Soldier Fly welfare science, micro-climate telemetry and humane rearing protocols.",
     address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
     sameAs: [site.linkedin, site.instagram],
   };
-  // Domain and email are unconfirmed (brief §9): only publish once configured/verified.
+  if (site.emailVerified) organisation.email = site.email;
+  const graph: Record<string, unknown>[] = [organisation];
+  // URLs are only published once the domain is configured (SITE_URL).
   if (siteUrl) {
-    data.url = siteUrl;
-    data.logo = `${siteUrl}/og-image.png`;
+    organisation["@id"] = `${siteUrl}/#organization`;
+    organisation.url = siteUrl;
+    organisation.logo = `${siteUrl}/logo.png`;
+    graph.push({
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: `${siteUrl}/`,
+      name: site.name,
+      alternateName: "EntoMetrics",
+      inLanguage: "en-GB",
+      publisher: { "@id": `${siteUrl}/#organization` },
+    });
   }
-  if (site.emailVerified) data.email = site.email;
-  return JSON.stringify(data).replace(/</g, "\\u003c");
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
 }
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -65,10 +83,14 @@ export function Layout({ children }: { children: ReactNode }) {
             <link rel="canonical" href={canonical} />
             <meta property="og:url" content={canonical} />
             <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content="EntoMetrics Africa logo" />
+            <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
           </>
         ) : null}
         <Links />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: organisationJsonLd(siteUrl) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData(siteUrl) }} />
         {PLAUSIBLE_DOMAIN ? (
           <script defer data-domain={PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" />
         ) : null}

@@ -2,7 +2,6 @@ import { useInView } from "motion/react";
 import { useRef, useState, type ReactNode } from "react";
 import { SectionHeader } from "~/components/ui";
 import { homeLinks } from "~/data/home";
-import { ILLUSTRATIVE_CAPTION } from "~/data/site";
 import { storyBeats } from "~/data/story";
 import { usePrefersReducedMotion } from "~/lib/usePrefersReducedMotion";
 import { BinGrid } from "./BinGrid";
@@ -30,7 +29,7 @@ export function AboutStory() {
             title={storyBeats.demand.title}
             text={storyBeats.demand.text}
             reduce={reduce}
-            figure={{ label: "Fig. 1 · Rearing capacity (abstract)", caption: ILLUSTRATIVE_CAPTION, tone: "outline" }}
+            figure={{ label: "Fig. 1 · Rearing capacity (abstract)", tone: "outline" }}
           >
             {(play) => <BinGrid play={play} reduce={reduce} />}
           </Beat>
@@ -41,7 +40,6 @@ export function AboutStory() {
             reduce={reduce}
             figure={{
               label: "Fig. 2 · Substrate temperature against a provisional threshold",
-              caption: ILLUSTRATIVE_CAPTION,
               tone: "panel",
               link: homeLinks.telemetry,
             }}

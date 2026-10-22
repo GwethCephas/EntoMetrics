@@ -5,7 +5,6 @@ import { programmes } from "~/data/programmes";
 import { site } from "~/data/site";
 import { InstagramIcon, LinkedInIcon } from "./icons";
 import { Logo } from "./Logo";
-import { RichText } from "./RichText";
 
 const footerLink =
   "text-ink underline decoration-transparent decoration-1 underline-offset-4 transition-[color,text-decoration-color] duration-150 hover:text-forest hover:decoration-gold focus-visible:decoration-gold";
@@ -97,9 +96,6 @@ export function Footer() {
 
       <div className="border-t border-rule">
         <div className="container-research flex flex-col gap-2 py-5 font-mono text-[0.75rem] text-ink-70 md:flex-row md:items-center md:justify-between">
-          <p>
-            <RichText text={site.registrationLine} />
-          </p>
           <p>{site.copyright}</p>
         </div>
       </div>

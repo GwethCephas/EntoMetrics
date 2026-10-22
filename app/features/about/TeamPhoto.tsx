@@ -1,15 +1,20 @@
 import type { TeamMember } from "~/data/team";
 
-/** Square portrait, or a visible placeholder until the client supplies one. */
+/** Square portrait, or the person's initials if no photo is available. */
 export function TeamPhoto({ member, className = "" }: { member: TeamMember; className?: string }) {
   if (!member.photo) {
+    const initials = member.name
+      .split(/\s+/)
+      .map((part) => part[0])
+      .slice(0, 2)
+      .join("");
     return (
       <div
         role="img"
-        aria-label={`Photo of ${member.name} to be supplied`}
-        className={`flex aspect-square w-full items-center justify-center rounded-[var(--radius-card)] bg-ink-70 p-3 text-center font-mono text-[0.6875rem] text-paper ${className}`}
+        aria-label={member.name}
+        className={`flex aspect-square w-full items-center justify-center rounded-[var(--radius-card)] bg-sunken text-2xl font-medium text-forest ${className}`}
       >
-        [PHOTO: {member.name}]
+        {initials}
       </div>
     );
   }

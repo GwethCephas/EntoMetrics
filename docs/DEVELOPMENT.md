@@ -34,7 +34,7 @@ app/
   styles/app.css       Tailwind setup and design tokens
 workers/app.ts         Cloudflare Worker entry (www redirect, security headers)
 scripts/               Asset scripts (logo extraction, photos, OG image)
-docs/source/           Original logo PDF and photos
+docs/source/           Supplied logo files and photos
 tests/                 Vitest (unit) and Playwright (e2e) suites
 ```
 
@@ -57,12 +57,11 @@ Content rules from the brief:
 - Text in square brackets, such as `[PLACEHOLDER — CONFIRM WITH CLIENT: …]`, is highlighted on the page until replaced.
 - Run `npm run check` after content changes.
 
-Regenerate assets (Python with PyMuPDF and Pillow):
+Regenerate assets (Python with Pillow):
 
 ```powershell
-python -I scripts/extract-logo.py docs/source/entometrics-africa-logo-wordmark.pdf
+python -I scripts/process-logo.py docs/source/entometrics-africa-logo-v2.jpg   # logo lockup, favicon, social image
 python -I scripts/process-photos.py
-python -I scripts/make-og-image.py
 ```
 
 ## Configuration
@@ -92,3 +91,15 @@ The site runs on Cloudflare Workers as `entometrics-africa`, on `entometrics.com
 - **Automatic:** the GitHub repo is connected to Cloudflare Workers Builds. Every push to `main` builds (`npm run build`) and deploys (`npx wrangler deploy`). Pushes to other branches get a preview URL.
 - **Manual:** run `npm run deploy` from this folder. Push the same commit to GitHub too, or the next automatic build will replace it.
 - A failed build leaves the previous version live. Workers Builds doesn't run the tests, so run `npm run check` before pushing.
+
+## Search engines (SEO)
+
+Built in:
+- **Per-page metadata:** a unique title and description, canonical URL, Open Graph and Twitter tags (`app/lib/meta.ts`, `app/root.tsx`).
+- **Structured data (JSON-LD):** `ResearchOrganization` (name, logo, location, email, LinkedIn and Instagram) and `WebSite` (the site name in search results).
+- **Sitemap and robots:** `/sitemap.xml` lists every public page with a `<lastmod>` build date; `/robots.txt` allows all crawlers and points to the sitemap. Pages are listed in `app/lib/routes.ts`.
+- **One URL per page:** `workers/app.ts` 301-redirects http → https, www → bare domain and `/page/` → `/page`, and sends HSTS (rules in `app/lib/canonical.ts`).
+
+After deploying content changes:
+- **Bing, Yandex and other IndexNow engines:** run `npm run indexnow`. It submits every sitemap URL, using the key file `public/<key>.txt`, which must stay published.
+- **Google:** doesn't use IndexNow. It recrawls via the sitemap registered in Google Search Console. For an urgent page, use URL Inspection → Request indexing.

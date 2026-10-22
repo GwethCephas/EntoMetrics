@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { DraftNotice } from "./DraftNotice";
 import { PageHeader } from "./PageHeader";
-import { RichText } from "./RichText";
 
 export interface PolicySection {
   heading: string;
@@ -54,7 +53,7 @@ export function PolicyPage({
               <h2 id={slugify(section.heading)}>{section.heading}</h2>
               {section.body.map((paragraph) => (
                 <p key={paragraph} className="mt-3">
-                  <RichText text={paragraph} />
+                  {paragraph}
                 </p>
               ))}
             </section>

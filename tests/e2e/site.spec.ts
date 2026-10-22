@@ -110,12 +110,6 @@ test("hero 'Our approach' scrolls to the About story", async ({ page }) => {
 
 test("home previews link to the full content", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "Meet the team" }).click();
-  await expect(page).toHaveURL(/\/about#team$/);
-  await expect(page.locator("#team-heading")).toBeInViewport();
-  await expect(page.getByText("Founder and programme builder who has led national innovation programmes")).toBeVisible();
-
-  await page.goto("/");
   await page.getByRole("link", { name: "See the full theory of change" }).click();
   await expect(page).toHaveURL(/\/research#theory-of-change$/);
   await expect(page.locator("#toc-heading")).toBeInViewport();
@@ -131,7 +125,6 @@ test("home page sections appear in the brief's order", async ({ page }) => {
       "#mission-heading",
       "#programmes-heading",
       "#toc-heading",
-      "#team-heading",
       "#collab-heading",
     ];
     return order.map((sel) => document.querySelector(sel)!.getBoundingClientRect().top + window.scrollY);
@@ -141,6 +134,22 @@ test("home page sections appear in the brief's order", async ({ page }) => {
   await expect(
     page.getByText("Protocols and statistical analysis plans will be published before data collection begins.").first(),
   ).toBeAttached();
+  // The team lives on About only.
+  await expect(page.locator("#team-heading")).toHaveCount(0);
+});
+
+test("About page shows the team with LinkedIn profiles", async ({ page }) => {
+  await page.goto("/about#team");
+  await expect(page.locator("#team-heading")).toBeVisible();
+  await expect(page.locator("#team a[href^='https://www.linkedin.com/in/']")).toHaveCount(4);
+});
+
+test("no bracketed placeholder text appears on any page", async ({ page }) => {
+  for (const path of ROUTES.map((r) => r.path)) {
+    await page.goto(path);
+    const text = await page.locator("body").innerText();
+    expect(text, path).not.toMatch(/\[(PLACEHOLDER|LEGAL REVIEW|PHOTO|LINKEDIN)/);
+  }
 });
 
 for (const width of [360, 390, 768, 1024, 1440]) {
@@ -210,7 +219,6 @@ test.describe("animated About story", () => {
     await expect
       .poll(() => page.locator("[data-alert-chip]").evaluate((el) => getComputedStyle(el).opacity), { timeout: 6000 })
       .toBe("1");
-    await expect(page.getByText("Illustrative visualisation. Not field data.").first()).toBeVisible();
 
     const beat2 = page.locator('[data-beat="2"]');
     await beat2.locator("[data-visual]").scrollIntoViewIfNeeded();
@@ -246,20 +254,31 @@ test.describe("animated About story", () => {
 test("sitemap, robots and structured data are served", async ({ page, request }) => {
   const sitemap = await request.get("/sitemap.xml");
   expect(sitemap.status()).toBe(200);
-  expect(await sitemap.text()).toContain("/research/substrate-telemetry</loc>");
+  const xml = await sitemap.text();
+  expect(xml).toContain("/research/substrate-telemetry</loc>");
+  expect(xml).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   const robots = await request.get("/robots.txt");
   expect(await robots.text()).toContain("Sitemap:");
+  for (const asset of ["/logo.png", "/favicon.png", "/apple-touch-icon.png", "/og-image.png"]) {
+    expect((await request.get(asset)).status(), asset).toBe(200);
+  }
 
   await page.goto("/");
   const jsonLd = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
-  expect(jsonLd.name).toBe("EntoMetrics Africa");
-  expect(jsonLd.sameAs).toContain("https://www.linkedin.com/company/entometrics-africa/");
-  expect(jsonLd.sameAs).toContain("https://www.instagram.com/entometrics_africa/");
+  const organisation = jsonLd["@graph"].find((node: { "@type": string }) => node["@type"] === "ResearchOrganization");
+  const website = jsonLd["@graph"].find((node: { "@type": string }) => node["@type"] === "WebSite");
+  expect(organisation.name).toBe("EntoMetrics Africa");
+  expect(organisation.sameAs).toContain("https://www.linkedin.com/company/entometrics-africa/");
+  expect(organisation.sameAs).toContain("https://www.instagram.com/entometrics_africa/");
+  expect(organisation.email).toBe("info@entometrics.com");
+  expect(organisation.logo).toBe("https://entometrics.com/logo.png");
+  expect(website.name).toBe("EntoMetrics Africa");
+  expect(website.url).toBe("https://entometrics.com/");
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200");
 
   await page.goto("/contact");
   await expect(page.getByRole("link", { name: /entometrics_africa on Instagram/ })).toHaveAttribute(
     "href",
     "https://www.instagram.com/entometrics_africa/",
   );
-  expect(jsonLd.email).toBe("info@entometrics.com");
 });

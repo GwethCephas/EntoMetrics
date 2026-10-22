@@ -29,9 +29,12 @@ describe("content accuracy rules", () => {
     expect(telemetrySpecs.some((r) => /\d+\s*°?C/.test(r.value))).toBe(false);
   });
 
-  it("has four team members and no fabricated profile links", () => {
+  it("has four team members with clean, client-supplied LinkedIn profiles", () => {
     expect(team.map((m) => m.name)).toEqual(["Clinton Adoga", "Paul Murani", "Mary Wairimu", "Fernán Gizzi"]);
-    for (const m of team) expect(m.linkedin).toBeNull();
+    for (const m of team) {
+      expect(m.linkedin).toMatch(/^https:\/\/www\.linkedin\.com\/in\/[a-z0-9-]+$/);
+      expect(m.responsibilities.length).toBeGreaterThan(40);
+    }
   });
 
   it("keeps the brief's exact positioning copy for the About page", () => {

@@ -19,7 +19,8 @@
     "test:e2e": "playwright test",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
     "deploy": "npm run build && wrangler deploy",
-    "deploy:preview": "npm run build && wrangler versions upload"
+    "deploy:preview": "npm run build && wrangler versions upload",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

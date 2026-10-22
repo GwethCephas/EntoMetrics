@@ -1,7 +1,6 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { data, Link } from "react-router";
-import { RichText } from "~/components/RichText";
 import { StatusTimeline } from "~/components/StatusTimeline";
 import { ProgrammeCode, StatusBadge } from "~/components/ui";
 import { protocolsNote } from "~/data/home";
@@ -85,7 +84,7 @@ export default function ProgrammePage({ loaderData }: Route.ComponentProps) {
                       : "text-ink-70"
                   }
                 >
-                  <RichText text={text} />
+                  {text}
                 </p>
               ))}
             </div>
@@ -94,24 +93,24 @@ export default function ProgrammePage({ loaderData }: Route.ComponentProps) {
           <BodySection id="method" title="Method">
             {programme.method.map((text) => (
               <p key={text}>
-                <RichText text={text} />
+                {text}
               </p>
             ))}
             <p className="text-[0.9375rem] italic text-ink-70">{protocolsNote}</p>
           </BodySection>
 
-          <BodySection id="outputs" title="Planned outputs">
-            <ul className="space-y-2">
-              {programme.plannedOutputs.map((output) => (
-                <li key={output} className="flex gap-3">
-                  <span aria-hidden className="mt-[0.8em] h-px w-4 shrink-0 bg-forest" />
-                  <span>
-                    <RichText text={output} />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </BodySection>
+          {programme.plannedOutputs.length > 0 ? (
+            <BodySection id="outputs" title="Planned outputs">
+              <ul className="space-y-2">
+                {programme.plannedOutputs.map((output) => (
+                  <li key={output} className="flex gap-3">
+                    <span aria-hidden className="mt-[0.8em] h-px w-4 shrink-0 bg-forest" />
+                    <span>{output}</span>
+                  </li>
+                ))}
+              </ul>
+            </BodySection>
+          ) : null}
         </div>
 
         <aside aria-labelledby="status" className="lg:col-span-4 lg:col-start-9">

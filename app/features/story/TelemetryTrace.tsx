@@ -69,7 +69,7 @@ export function TelemetryTrace({ play, reduce }: TelemetryTraceProps) {
       <title id="trace-title">Illustrative temperature trace crossing an alert threshold</title>
       <desc id="trace-desc">
         A line rises from left to right and crosses a dashed threshold line, at which point an SMS alert is
-        shown. Illustrative visualisation. Not field data.
+        shown.
       </desc>
 
       {/* Faint gridlines and value-free ticks */}

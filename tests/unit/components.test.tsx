@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { createRoutesStub, MemoryRouter } from "react-router";
 import { afterEach, describe, expect, it } from "vitest";
 import { Header } from "~/components/Header";
-import { RichText } from "~/components/RichText";
 import { StatusTimeline } from "~/components/StatusTimeline";
 import { StatusBadge } from "~/components/ui";
 import { AboutStory } from "~/features/story/AboutStory";
@@ -29,15 +28,6 @@ describe("StatusBadge and StatusTimeline", () => {
   });
 });
 
-describe("RichText", () => {
-  it("highlights bracketed placeholders", () => {
-    const { container } = render(<RichText text="Hello [PLACEHOLDER — CONFIRM WITH CLIENT: x] world" />);
-    const marked = container.querySelectorAll("[data-placeholder]");
-    expect(marked).toHaveLength(1);
-    expect(marked[0]).toHaveTextContent("[PLACEHOLDER — CONFIRM WITH CLIENT: x]");
-  });
-});
-
 // The story links to the Telemetry page, so it needs a router.
 const renderStory = () =>
   render(
@@ -47,12 +37,11 @@ const renderStory = () =>
   );
 
 describe("AboutStory", () => {
-  it("shows all three beats with the required caption", () => {
+  it("shows all three beats", () => {
     renderStory();
     expect(screen.getByRole("heading", { name: "Demand is scaling." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "A critical blind spot." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Our approach." })).toBeInTheDocument();
-    expect(screen.getAllByText("Illustrative visualisation. Not field data.").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("SMS ALERT")).toBeInTheDocument();
   });
 

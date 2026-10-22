@@ -12,31 +12,31 @@ function TeamMemberEntry({ member }: { member: TeamMember }) {
         <p className="mt-1 font-mono text-[0.6875rem] uppercase leading-relaxed tracking-[0.06em] text-ink-70">
           {member.role}
         </p>
-        <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink">{member.bio}</p>
-        <div className="mt-3">
+        <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink">{member.responsibilities}</p>
+        <p className="mt-3 text-[0.875rem] leading-relaxed text-ink-70">
+          <span className="font-mono text-[0.6875rem] uppercase tracking-[0.06em]">Background · </span>
+          {member.bio}
+        </p>
+        <div className="mt-2">
           {member.linkedin ? (
             <a
               href={member.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 text-forest hover:text-forest-deep"
+              className="text-link inline-flex min-h-11 items-center gap-2 text-[0.875rem]"
             >
-              <LinkedInIcon width={16} height={16} />
-              <span className="sr-only">{member.name} on LinkedIn (opens in a new tab)</span>
+              <LinkedInIcon width={15} height={15} />
+              LinkedIn
+              <span className="sr-only">: {member.name} (opens in a new tab)</span>
             </a>
-          ) : (
-            <span className="placeholder inline-flex items-center gap-2 text-[0.6875rem]">
-              <LinkedInIcon width={12} height={12} />
-              [LINKEDIN: to be supplied]
-            </span>
-          )}
+          ) : null}
         </div>
       </div>
     </li>
   );
 }
 
-/** Full team section for the About page: photos, roles, bios, governance. */
+/** Full team section for the About page: photos, roles, responsibilities, bios, LinkedIn, governance. */
 export function TeamGrid() {
   return (
     <section id="team" aria-labelledby="team-heading" className="section">

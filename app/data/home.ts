@@ -42,7 +42,6 @@ export const homeLinks = {
   missionVision: { label: "Read our mission and vision", to: "/about" },
   research: { label: "All research programmes", to: "/research" },
   theoryOfChange: { label: "See the full theory of change", to: "/research#theory-of-change" },
-  team: { label: "Meet the team", to: "/about#team" },
   telemetry: { label: "How the telemetry is designed to work", to: "/telemetry" },
 };
 

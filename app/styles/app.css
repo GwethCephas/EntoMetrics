@@ -179,16 +179,6 @@
     transform: translateX(3px);
   }
 
-  .placeholder {
-    @apply font-mono text-[0.85em] text-ink-70;
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent 0 6px,
-      color-mix(in srgb, var(--color-gold) 10%, transparent) 6px 12px
-    );
-    outline: 1px dashed var(--color-gold);
-    outline-offset: 1px;
-  }
 
   /* Long-form text (programme pages, policies). */
   .prose-research {

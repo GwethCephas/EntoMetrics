@@ -3,12 +3,10 @@ import { Link } from "react-router";
 import { LinkedInIcon } from "~/components/icons";
 import { Reveal } from "~/components/Reveal";
 import { ButtonAnchor, ButtonLink, ProgrammeCode, ReadMore, SectionHeader, StatusBadge } from "~/components/ui";
-import { TeamPhoto } from "~/features/about/TeamPhoto";
 import { AboutStory } from "~/features/story/AboutStory";
 import { collaboration, hero, homeLinks, mission, protocolsNote, statusPanel, statusStrip, vision } from "~/data/home";
 import { programmes } from "~/data/programmes";
 import { site } from "~/data/site";
-import { team } from "~/data/team";
 import { theoryOfChange } from "~/data/theoryOfChange";
 import { pageMeta } from "~/lib/meta";
 import type { Route } from "./+types/home";
@@ -177,30 +175,6 @@ function TheoryOfChangePreview() {
   );
 }
 
-function TeamPreview() {
-  return (
-    <section aria-labelledby="team-heading" className="section">
-      <div className="container-research">
-        <SectionHeader
-          index="People"
-          title="Team"
-          id="team-heading"
-          action={<ReadMore to={homeLinks.team.to}>{homeLinks.team.label}</ReadMore>}
-        />
-        <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:grid-cols-4">
-          {team.map((member) => (
-            <li key={member.name}>
-              <TeamPhoto member={member} />
-              <h3 className="mt-4 text-[1.0625rem]">{member.name}</h3>
-              <p className="mt-1 text-[0.875rem] leading-snug text-ink-70">{member.role}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
 function Collaboration() {
   return (
     <section aria-labelledby="collab-heading" className="section bg-sunken">
@@ -248,7 +222,6 @@ export default function Home() {
       <MissionVisionPreview />
       <ResearchPreview />
       <TheoryOfChangePreview />
-      <TeamPreview />
       <Collaboration />
     </>
   );

@@ -2,9 +2,8 @@ import { Fan, MessageSquareText, Smartphone, Thermometer, type LucideIcon } from
 import { PageHeader } from "~/components/PageHeader";
 import { Reveal } from "~/components/Reveal";
 import { StatusTimeline } from "~/components/StatusTimeline";
-import { Caption, ReadMore, SectionHeader, StatusBadge } from "~/components/ui";
+import { ReadMore, SectionHeader, StatusBadge } from "~/components/ui";
 import { getProgramme } from "~/data/programmes";
-import { ILLUSTRATIVE_CAPTION } from "~/data/site";
 import { pipeline, TBC, telemetrySpecs, type SpecRow } from "~/data/telemetry";
 import { pageMeta } from "~/lib/meta";
 import type { Route } from "./+types/telemetry";
@@ -64,14 +63,8 @@ function BlockDiagram() {
           })}
         </ol>
       </Reveal>
-      <figcaption
-        id="diagram-caption"
-        className="mt-5 flex flex-col gap-1 border-t border-rule pt-3 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <span className="text-[0.875rem] text-ink-70">
-          Planned system: probe in substrate, 2G SMS gateway, operator phone, action.
-        </span>
-        <Caption>{ILLUSTRATIVE_CAPTION}</Caption>
+      <figcaption id="diagram-caption" className="mt-5 border-t border-rule pt-3 text-[0.875rem] text-ink-70">
+        Planned system: probe in substrate, 2G SMS gateway, operator phone, action.
       </figcaption>
     </figure>
   );

@@ -1,5 +1,0 @@
-# Server-side variables for local `npm run dev` (read by the Cloudflare Vite plugin).
-# Copy to .dev.vars if needed. In production, set them in wrangler.jsonc `vars`.
-
-# Public site origin without trailing slash, e.g. https://entometrics.com (enables canonical URLs)
-SITE_URL=

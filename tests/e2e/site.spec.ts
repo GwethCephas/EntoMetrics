@@ -144,7 +144,7 @@ test("Team page lists everyone with LinkedIn and no background bios", async ({ p
   await expect(page.getByRole("heading", { level: 2 })).toHaveCount(5);
   await expect(page.locator("main a[href^='https://www.linkedin.com/in/']")).toHaveCount(5);
   await expect(page.getByText("Background ·")).toHaveCount(0);
-  await expect(page.getByRole("img", { name: "Cephas Gweth" })).toHaveText("CG");
+  await expect(page.getByRole("img", { name: "Portrait of Cephas Gweth" })).toBeVisible();
 
   // Team is its own page now, not a section of About.
   await page.goto("/about");

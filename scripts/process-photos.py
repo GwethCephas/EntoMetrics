@@ -21,6 +21,7 @@ CROPS = {
     "clinton-adoga": (68, 30, 760),
     "paul-murani": (0, 0, 1254),
     "mary-wairimu": (0, 60, 1098),
+    "cephas-gweth": (98, 0, 783),
 }
 
 

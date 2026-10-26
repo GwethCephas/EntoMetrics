@@ -1,3 +1,5 @@
+import cephasJpg from "~/assets/team/cephas-gweth.jpg";
+import cephasWebp from "~/assets/team/cephas-gweth.webp";
 import clintonJpg from "~/assets/team/clinton-adoga.jpg";
 import clintonWebp from "~/assets/team/clinton-adoga.webp";
 import fernanJpg from "~/assets/team/fernan-gizzi.jpg";
@@ -61,7 +63,7 @@ export const team: TeamMember[] = [
     role: "Data Platform Engineer",
     responsibilities:
       "Builds the software layer that turns raw sensor readings into usable data: data pipelines, dashboards, alerts, and the web and mobile tools facility operators use.",
-    photo: null, // photo to be supplied
+    photo: { webp: cephasWebp, jpg: cephasJpg },
     linkedin: "https://www.linkedin.com/in/cephas-gweth",
   },
 ];

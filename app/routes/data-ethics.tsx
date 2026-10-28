@@ -26,7 +26,7 @@ const sections: PolicySection[] = [
     heading: "Honest reporting",
     body: [
       "Programme status labels on this site reflect the actual stage of each programme. We do not describe planned work as completed.",
-      "Temperature thresholds are provisional until confirmed against the published literature.",
+      "Alert threshold values are placeholders. No threshold on this site should be read as an established finding.",
     ],
   },
 ];

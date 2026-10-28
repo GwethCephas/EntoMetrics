@@ -6,19 +6,19 @@ export interface ChangeStage {
 export const theoryOfChange: ChangeStage[] = [
   {
     title: "Problem",
-    text: "Insect farming is expanding in Africa with almost no welfare evidence; heat-stress losses go unmonitored; slaughter methods are untested.",
+    text: "Insect farming is expanding in Africa with almost no welfare evidence. Slaughter methods are untested, and heat-stress losses go unmonitored.",
   },
   {
     title: "Activities",
-    text: "Deploy offline SMS temperature sensors; onboard pilot facilities with a baseline period; count mortality using a standard protocol; run a randomised comparison of slaughter methods; engage producers and standard-setters.",
+    text: "Onboard 25 pilot facilities with a baseline period; switch on alerts in randomised steps across facilities; estimate mortality with a standard sampling protocol; run a randomised comparison of slaughter methods; register protocols and analysis plans before data collection; engage producers and standard-setters.",
   },
   {
     title: "Outputs",
-    text: "An alert system; a micro-climate dataset; an assay dataset; published protocols.",
+    text: "An alert system; a micro-climate dataset; an assay dataset; registered protocols and analysis plans; archived code and data.",
   },
   {
     title: "Outcomes",
-    text: "Producers act on alerts, reducing thermal-stress mortality; evidence on which harvest method ends responsiveness fastest.",
+    text: "Evidence on which harvest method ends responsiveness fastest. Producers act on alerts, which may reduce thermal-stress mortality; because more larvae then reach slaughter, the net welfare effect is reported as unclear.",
   },
   {
     title: "Long-term impact",
@@ -29,9 +29,9 @@ export const theoryOfChange: ChangeStage[] = [
 export const assumptions = [
   "operators respond to alerts",
   "heat-stress mortality is non-negligible at pilot sites",
-  "pilot facilities agree to participate",
-  "temperature thresholds are confirmed against the published literature (provisional)",
+  "pilot facilities agree to participate and to share anonymised data",
+  "alert thresholds are placeholders pending the acute exposure-response work",
 ];
 
 export const failureCriteria =
-  "If baseline thermal-stress mortality proves negligible, the programme shifts emphasis to the slaughter assays and standardisation work.";
+  "If excess mortality linked to temperature excursions is negligible at baseline (below 3%), the slaughter assays continue unchanged and the telemetry is repurposed as an operational-efficiency tool.";

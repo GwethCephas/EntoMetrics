@@ -12,7 +12,7 @@ These items are missing, unconfirmed or depend on an interpretation. Each one ap
 | 4 | **Domain and email** (`entometrics.com`, `info@entometrics.com`) | Done: the site is live on entometrics.com (www redirects to it). The email is marked confirmed and listed in JSON-LD. **Make sure info@entometrics.com actually receives mail** (e.g. Cloudflare Email Routing). Contact-form enquiries go through Formspree to cfreeka18@gmail.com. | `app/data/site.ts`, `wrangler.jsonc` |
 | 5 | **Photos and bios** | Photos supplied and in use for all four team members. Bios use the brief's exact wording and still need each person's approval. | `app/data/team.ts`, `app/assets/team/` |
 | 6 | **Personal LinkedIn links** for all four team members | Done: supplied by the client and shown on the About page with each person's responsibilities. Tracking parameters were removed from the URLs. | `app/data/team.ts` |
-| 7 | **Telemetry specifications** | Only the facts stated in the brief are filled in: substrate temperature, 2G SMS, offline-first. Every other row is `TBC`, including the alert threshold. | `app/data/telemetry.ts` |
+| 7 | **Telemetry specifications** | Updated from the client's edit guide (October 2026): stated rows (substrate temperature and humidity, SMS over 2G with dual-SIM failover and 4G fallback, offline-first, local alarm) and planned components (sensor, enclosure, power). Measurement range, accuracy, sampling interval, alert threshold and unit cost stay `TBC`; power capacity is TBC. | `app/data/telemetry.ts` |
 | 8 | **Protocol publication** (OSF or Zenodo DOIs) | "No protocols have been published yet" on each programme page. | `protocolLinks` in `app/data/programmes.ts` |
 
 ## Home page deviates from brief §4/§10 by agreement

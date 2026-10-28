@@ -53,18 +53,18 @@ export const programmes: Programme[] = [
     teaser:
       "Developing offline-first substrate probes designed to send SMS alerts when bed temperatures exceed critical thresholds.",
     summary:
-      "Intensive larval rearing generates concentrated metabolic heat. When dense substrate beds exceed critical temperature thresholds, large numbers of larvae can die unmonitored. We are developing ruggedised, offline-first substrate probes for tropical farm conditions. Operating over low-bandwidth 2G networks, the system will send automated SMS alerts to facility operators so they can adjust aeration and ventilation. Data from the pilot is intended to inform practical, evidence-based guidance for Kenya’s national code of practice for Black Soldier Fly farming.",
+      "Intensive larval rearing generates concentrated metabolic heat. When dense substrate beds get too hot, large numbers of larvae can die unmonitored. We are developing ruggedised, offline-first substrate probes for tropical farm conditions. The system will send automated SMS alerts to facility operators over 2G, with dual-SIM failover and a 4G fallback, so they can adjust aeration and ventilation. A local alarm will also work with no network at all. Data from the pilot is intended to inform practical, evidence-based guidance for Kenya’s national insect production code of practice (KS 2921).",
     question: [
-      "Intensive larval rearing generates concentrated metabolic heat. When dense substrate beds exceed critical temperature thresholds, large numbers of larvae can die unmonitored.",
+      "Intensive larval rearing generates concentrated metabolic heat. When dense substrate beds get too hot, large numbers of larvae can die unmonitored.",
     ],
     method: [
-      "We are developing ruggedised, offline-first substrate probes for tropical farm conditions. Operating over low-bandwidth 2G networks, the system will send automated SMS alerts to facility operators so they can adjust aeration and ventilation.",
-      "Planned activities: deploy offline SMS temperature sensors; onboard pilot facilities with a baseline period; count mortality using a standard protocol.",
-      "Temperature thresholds are provisional until confirmed against the published literature.",
-      "If baseline thermal-stress mortality proves negligible, the programme shifts emphasis to the slaughter assays and standardisation work.",
-      "Data from the pilot is intended to inform practical, evidence-based guidance for Kenya’s national code of practice for Black Soldier Fly farming.",
+      "We are developing ruggedised, offline-first substrate probes for tropical farm conditions. The system will send automated SMS alerts to facility operators over 2G, with dual-SIM failover and a 4G fallback, so they can adjust aeration and ventilation. A local alarm will also work with no network at all.",
+      "Planned activities: onboard 25 pilot facilities with a baseline period; switch on alerts in randomised steps across facilities; estimate mortality with a standard sampling protocol.",
+      "Alert thresholds are placeholders pending the acute exposure-response work.",
+      "If excess mortality linked to temperature excursions is negligible at baseline (below 3%), the slaughter assays continue unchanged and the telemetry is repurposed as an operational-efficiency tool.",
+      "Data from the pilot is intended to inform practical, evidence-based guidance for Kenya’s national insect production code of practice (KS 2921).",
     ],
-    plannedOutputs: ["An alert system", "A micro-climate dataset", "Published protocols"],
+    plannedOutputs: ["An alert system", "A micro-climate dataset", "Registered protocols and analysis plans"],
     protocolLinks: [],
   },
   {
@@ -93,15 +93,15 @@ export const programmes: Programme[] = [
     stage: "planned",
     teaser: "A planned randomised comparison of common harvest methods against pre-specified behavioural endpoints.",
     summary:
-      "Planned randomised comparison of common commercial harvest methods (boiling, blanching, rapid cooling) against pre-specified behavioural endpoints, including time to irreversible loss of responsiveness.",
+      "A planned randomised comparison of common commercial slaughter methods (boiling, blanching, rapid cooling, and chilling followed by freezing) against pre-specified behavioural endpoints, including time to irreversible loss of responsiveness. Loss of responsiveness is a behavioural proxy and does not establish loss of capacity to suffer.",
     question: [
       "Which harvest method ends responsiveness fastest?",
     ],
     method: [
-      "Planned randomised comparison of common commercial harvest methods (boiling, blanching, rapid cooling) against pre-specified behavioural endpoints, including time to irreversible loss of responsiveness.",
-      "Assay protocols and the statistical analysis plan are pre-specified before data collection, video scoring is blinded, and the advisor reviews the final analysis.",
+      "A planned randomised comparison of common commercial slaughter methods (boiling, blanching, rapid cooling, and chilling followed by freezing) against pre-specified behavioural endpoints, including time to irreversible loss of responsiveness. Loss of responsiveness is a behavioural proxy and does not establish loss of capacity to suffer.",
+      "Assay protocols and the statistical analysis plan are pre-specified, time-stamped and registered publicly before data collection, and recovery scoring is blind to treatment. The advisor then runs the pre-specified analysis and archives the code and data so that anyone can re-run it.",
     ],
-    plannedOutputs: ["An assay dataset", "Published protocols"],
+    plannedOutputs: ["An assay dataset", "Registered protocols and analysis plans", "Archived code and data"],
     protocolLinks: [],
   },
 ];

@@ -4,7 +4,7 @@ import { Reveal } from "~/components/Reveal";
 import { StatusTimeline } from "~/components/StatusTimeline";
 import { ReadMore, SectionHeader, StatusBadge } from "~/components/ui";
 import { getProgramme } from "~/data/programmes";
-import { pipeline, TBC, telemetrySpecs, type SpecRow } from "~/data/telemetry";
+import { pipeline, SPEC_GROUPS, TBC, telemetrySpecs, type SpecRow } from "~/data/telemetry";
 import { pageMeta } from "~/lib/meta";
 import type { Route } from "./+types/telemetry";
 
@@ -64,7 +64,7 @@ function BlockDiagram() {
         </ol>
       </Reveal>
       <figcaption id="diagram-caption" className="mt-5 border-t border-rule pt-3 text-[0.875rem] text-ink-70">
-        Planned system: probe in substrate, 2G SMS gateway, operator phone, action.
+        Planned system: probe in substrate, SMS gateway, operator phone, action, with a local alarm.
       </figcaption>
     </figure>
   );
@@ -99,8 +99,6 @@ function SpecGroup({ title, rows }: { title: string; rows: SpecRow[] }) {
 
 export default function Telemetry() {
   const programme = getProgramme("substrate-telemetry")!;
-  const stated = telemetrySpecs.filter((row) => row.value !== TBC);
-  const pending = telemetrySpecs.filter((row) => row.value === TBC);
 
   return (
     <>
@@ -130,8 +128,9 @@ export default function Telemetry() {
             id="how-heading"
             intro={
               <p>
-                A probe will sit in the substrate bed. Operating over low-bandwidth 2G networks, the system will send an
-                automated SMS alert to the facility operator, who can then adjust aeration and ventilation.
+                A probe will sit in the substrate bed. Operating over low-bandwidth 2G networks, with dual-SIM failover and
+                a 4G fallback, the system will send an automated SMS alert to the facility operator, who can then
+                adjust aeration and ventilation.
               </p>
             }
           />
@@ -149,9 +148,10 @@ export default function Telemetry() {
             id="threshold-heading"
             intro={
               <p className="border-l-2 border-gold pl-4 text-ink">
-                Alert threshold values are <strong className="font-semibold">provisional</strong> until they are
-                confirmed against the published literature. No threshold on this site should be read as an established
-                finding.
+                Alert threshold values are <strong className="font-semibold">placeholders</strong>. The published
+                studies are mostly on constant-temperature rearing, whereas our alerts target short heat peaks, so we
+                will define the acute exposure-response (temperature and duration) before any alert logic is fixed. No
+                threshold on this site should be read as an established finding.
               </p>
             }
           />
@@ -178,8 +178,9 @@ export default function Telemetry() {
                   ))}
                 </tr>
               </thead>
-              <SpecGroup title="Stated in the programme description" rows={stated} />
-              <SpecGroup title="To be confirmed" rows={pending} />
+              {SPEC_GROUPS.map((group) => (
+                <SpecGroup key={group.id} title={group.title} rows={telemetrySpecs.filter((row) => row.group === group.id)} />
+              ))}
             </table>
           </div>
         </div>

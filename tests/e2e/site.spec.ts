@@ -133,7 +133,7 @@ test("home page sections appear in the brief's order", async ({ page }) => {
   expect([...tops].sort((a, b) => a - b)).toEqual(tops);
   await expect(page.getByText("To reduce systemic welfare risks in insect bioconversion systems…")).toBeVisible();
   await expect(
-    page.getByText("Protocols and statistical analysis plans will be published before data collection begins.").first(),
+    page.getByText("Protocols and statistical analysis plans will be registered publicly, with a time stamp, before data collection begins.").first(),
   ).toBeAttached();
   // The team lives on About only.
   await expect(page.locator("#team-heading")).toHaveCount(0);

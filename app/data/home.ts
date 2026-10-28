@@ -51,4 +51,4 @@ export const collaboration = {
 };
 
 export const protocolsNote =
-  "Protocols and statistical analysis plans will be published before data collection begins.";
+  "Protocols and statistical analysis plans will be registered publicly, with a time stamp, before data collection begins.";

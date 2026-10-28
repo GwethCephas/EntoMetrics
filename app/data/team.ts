@@ -69,4 +69,4 @@ export const team: TeamMember[] = [
 ];
 
 export const governanceStatement =
-  "In Year 1 the scientific advisor acts strictly independently. Assay protocols and the statistical analysis plan are pre-specified before data collection, video scoring is blinded, and the advisor reviews the final analysis.";
+  "In Year 1 the scientific advisor acts strictly independently. Assay protocols and the statistical analysis plan are pre-specified, time-stamped and registered publicly before data collection, and recovery scoring is blind to treatment. The advisor then runs the pre-specified analysis and archives the code and data so that anyone can re-run it.";
